@@ -1,4 +1,4 @@
-#Dental Clinic Project
+# Dental Clinic Project
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
@@ -19,6 +19,9 @@ You can start editing the page by modifying `pages/index.js`. The page auto-upda
 [API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
 
 The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+
+## Store images on Google Drive
+https://drive.google.com/drive/folders/1cERV0k9Awfc-PfkpYdut11PmYOk1p09S?usp=sharing
 
 ## Learn More
 
