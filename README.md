@@ -22,6 +22,7 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 
 ## Store images on Cloudinary
 Cloud name: dqi7wt5oq
+
 Unsigned preset name: preset-test
 
 ## Learn More
