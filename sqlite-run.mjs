@@ -18,10 +18,9 @@ async function setup(){
 
 	console.log("Database ready");
 
-	//for test
-	const res = await db.all('SELECT * FROM ROLE');
-	console.log(res);
-
+	//for test @VinhPhu
+	// const res = await db.all('SELECT * FROM ROLE');
+	// console.log(res);
 }
 
 setup();
