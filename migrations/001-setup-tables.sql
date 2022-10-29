@@ -144,5 +144,13 @@ INSERT INTO ACCOUNT VALUES ('acc001',NULL, 'stillcakcak', NULL, 'cakcak');
 INSERT INTO USER VALUES ('u001', 'Nguyen', 'Phu', NULL, NULL, '0987654321', 'phu@gmail.com')
 
 
+-- TESTING @VinhPhu
+CREATE TABLE TRASH(
+    t_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    t_name TEXT NOT NULL
+);
+INSERT INTO TRASH (t_name) VALUES('name2');
+INSERT INTO TRASH (t_name) VALUES('name3');
+
 
 
