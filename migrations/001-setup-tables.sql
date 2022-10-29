@@ -11,23 +11,26 @@
 --DROP TABLE 
 --PRAGMA foreign_keys = OFF;
 
-
+/* CREATE TABLE */
 CREATE TABLE ROLE(
     r_id TEXT PRIMARY KEY, 
-    r_name TEXT NOT NULL
+    r_name TEXT NOT NULL 
 );
 CREATE TABLE ACCOUNT(
     acc_id TEXT PRIMARY KEY, 
-    acc_tk TEXT NOT NULL, 
-    acc_mk TEXT NOT NULL
+    acc_tk TEXT, 
+    acc_mk TEXT NOT NULL,
+    acc_avatar BLOB,
+    acc_username TEXT NOT NULL
 );
 CREATE TABLE USER(
     u_id TEXT PRIMARY KEY, 
-    u_username TEXT,
-    u_avatar TEXT,
+    u_fname TEXT,
+    u_lname TEXT,
     u_date INTEGER, 
     u_sex TEXT CHECK(u_sex IN ('Nam','Nu')), 
     u_phnu TEXT, 
+    u_email TEXT,
     acc_id TEXT NOT NULL, 
     r_id TEXT NOT NULL,
     FOREIGN KEY (acc_id) REFERENCES ACCOUNT(acc_id),
@@ -88,10 +91,8 @@ CREATE TABLE RECORD(
     rec_day TEXT NOT NULL, 
     rec_dease TEXT, 
     rec_desc TEXT, 
-    d_id TEXT, 
-    p_id TEXT, 
-    FOREIGN KEY (d_id) REFERENCES DOCTOR(d_id),
-    FOREIGN KEY (p_id) REFERENCES PATIENT(p_id)
+    appoint_id TEXT NOT NULL,
+    FOREIGN KEY (appoint_id) REFERENCES APPOINTMENT(appoint_id)
 );
 
 CREATE TABLE BLOG_AUTHOR(
@@ -102,11 +103,11 @@ CREATE TABLE BLOG_AUTHOR(
     PRIMARY KEY (d_id, b_id)
 );
 CREATE TABLE COMMENT(
-    u_id TEXT NOT NULL, 
+    acc_id TEXT NOT NULL, 
     b_id TEXT NOT NULL, 
     c_content TEXT, 
     c_time INTERGER,
-    FOREIGN KEY (u_id) REFERENCES USER(u_id),
+    FOREIGN KEY (acc_id) REFERENCES ACCOUNT(acc_id),
     FOREIGN KEY (b_id) REFERENCES BLOG(b_id)
 );
 CREATE TABLE BUYING_LIST(
@@ -119,6 +120,7 @@ CREATE TABLE BUYING_LIST(
     FOREIGN KEY (m_id) REFERENCES MEDICINE(m_id)
 );
 CREATE TABLE APPOINTMENT(
+    appoint_id TEXT PRIMARY KEY,
     p_id TEXT, 
     d_id TEXT, 
     s_id TEXT, 
@@ -128,17 +130,19 @@ CREATE TABLE APPOINTMENT(
     meet_place TEXT, 
     meet_room TEXT, 
     meet_desc TEXT,
-    PRIMARY KEY (p_id,d_id,s_id),
     FOREIGN KEY (p_id) REFERENCES PATIENT(p_id),
     FOREIGN KEY (d_id) REFERENCES DOCTOR(d_id),
     FOREIGN KEY (s_id) REFERENCES SERVICE(s_id)
 );
 
+/* INSERT DATA */
+--Role 
+INSERT INTO ROLE VALUES('r01', 'Doctor'), ('r02', 'Patient'), ('r03','Admin');
 
--- TESTING @VinhPhu
-CREATE TABLE TRASH(
-    t_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    t_name TEXT NOT NULL
-);
-INSERT INTO TRASH (t_name) VALUES('name2');
-INSERT INTO TRASH (t_name) VALUES('name3');
+-- Account 
+INSERT INTO ACCOUNT VALUES ('acc001',NULL, 'stillcakcak', NULL, 'cakcak');
+INSERT INTO USER VALUES ('u001', 'Nguyen', 'Phu', NULL, NULL, '0987654321', 'phu@gmail.com')
+
+
+
+
