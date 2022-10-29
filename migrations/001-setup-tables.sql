@@ -141,7 +141,7 @@ INSERT INTO ROLE VALUES('r01', 'Doctor'), ('r02', 'Patient'), ('r03','Admin');
 
 -- Account 
 INSERT INTO ACCOUNT VALUES ('acc001',NULL, 'stillcakcak', NULL, 'cakcak');
-INSERT INTO USER VALUES ('u001', 'Nguyen', 'Phu', NULL, NULL, '0987654321', 'phu@gmail.com')
+-- INSERT INTO USER VALUES ('u001', 'Nguyen', 'Phu', NULL, NULL, '0987654321', 'phu@gmail.com');
 
 
 -- TESTING @VinhPhu
