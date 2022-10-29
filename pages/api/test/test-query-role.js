@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import {open} from 'sqlite';
 import sqlite3 from 'sqlite3';
-import {GetDatabase, GetDatabaseFileName} from '../../../helpers/database-helper.js';
+import {GetDatabase, GetDatabaseFileName} from '../../../helpers/database/database-helper.mjs';
 
 
 export default async function handler(req, res) {

@@ -1,7 +1,7 @@
 import {open} from 'sqlite';
 import sqlite3 from 'sqlite3';
 import {unlinkSync, existsSync} from 'fs';
-import {GetDatabase, GetDatabaseFileName} from './helpers/database-helper.js';
+import {GetDatabaseFileName} from './database-helper.mjs';
 
 async function setup(){
     	const db_file_name = GetDatabaseFileName();
