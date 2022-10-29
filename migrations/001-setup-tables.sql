@@ -18,7 +18,7 @@ CREATE TABLE ROLE(
 );
 CREATE TABLE ACCOUNT(
     acc_id TEXT PRIMARY KEY, 
-    acc_tk TEXT NOT NULL, 
+    acc_tk TEXT, 
     acc_mk TEXT NOT NULL,
     acc_avatar BLOB,
     acc_username TEXT NOT NULL
@@ -135,6 +135,13 @@ CREATE TABLE APPOINTMENT(
     FOREIGN KEY (s_id) REFERENCES SERVICE(s_id)
 );
 
+/* INSERT DATA */
+--Role 
+INSERT INTO ROLE VALUES('r01', 'Doctor'), ('r02', 'Patient'), ('r03','Admin');
+
+-- Account 
+INSERT INTO ACCOUNT VALUES ('acc001',NULL, 'stillcakcak', NULL, 'cakcak');
+INSERT INTO USER VALUES ('u001', 'Nguyen', 'Phu', NULL, NULL, '0987654321', 'phu@gmail.com')
 
 
 
