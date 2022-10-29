@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node ./sqlite-run.mjs &&next dev",
+    "dev": "node ./helpers/database/sqlite-run-migration.mjs &&next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -16,7 +16,10 @@
     "sqlite3": "^5.1.2"
   },
   "devDependencies": {
+    "@types/node": "18.11.7",
+    "@types/react": "18.0.24",
     "eslint": "8.24.0",
-    "eslint-config-next": "12.3.1"
+    "eslint-config-next": "12.3.1",
+    "typescript": "4.8.4"
   }
 }
