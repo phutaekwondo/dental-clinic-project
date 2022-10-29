@@ -1,7 +1,6 @@
 
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 // import request and response from nextjs
-import { NextApiRequest, NextApiResponse } from 'next';
 import {open} from 'sqlite';
 import sqlite3 from 'sqlite3';
 
