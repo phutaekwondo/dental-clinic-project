@@ -9,7 +9,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 
     const username = req.body.acc_un;
     const password = req.body.acc_mk;
-    console.log(username, password);
+
     const db = await GetDatabase();
     if(req.method === 'POST') {
         const account = await db.get(`select * from account where acc_un="${username}"`);
