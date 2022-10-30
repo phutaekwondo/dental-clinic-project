@@ -85,10 +85,19 @@ CREATE TABLE MEDICINE(
 );
 CREATE TABLE RECORD(
     rec_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-    rec_day TEXT NOT NULL, 
-    rec_dease TEXT, 
-    rec_desc TEXT, 
-    appoint_id INTEGER NOT NULL,
+    d_id TEXT NOT NULL,
+    p_id TEXT NOT NULL,
+    rec_date INTEGER NOT NULL, 
+    rec_pName TEXT,  /*Qui tắc đặt tên : rec là thuộc tính thuộc bảng Record, chỉ có trong bảng Record, p là patient - chỉ thuộc tính có liên quan đến bệnh nhân, Name là tên thuộc tính*/
+    rec_pdease TEXT,
+    rec_pDateOB INTEGER,
+    rec_pSex TEXT CHECK(rec_sex IN ('Nam','Nu')),
+    rec_pEthnic TEXT,
+    rec_pBHXH TEXT,  
+    rec_pType TEXT,
+    appoint_id INTEGER,
+    FOREIGN KEY (d_id) REFERENCES DOCTOR(d_id),
+    FOREIGN KEY (p_id) REFERENCES PATIENT(p_id),
     FOREIGN KEY (appoint_id) REFERENCES APPOINTMENT(appoint_id)
 );
 
