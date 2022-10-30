@@ -3,9 +3,18 @@
 import {NextApiRequest, NextApiResponse} from 'next';
 import {open} from 'sqlite';
 import sqlite3 from 'sqlite3';
+import { GetDatabase } from '../../../helpers/database/database-helper.mjs';
 
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
+	//if get method, for testing
+	if(req.method === 'GET'){
+		//get database
+		const db = await GetDatabase();
+		//get all accounts
+		const accounts = await db.all('SELECT * FROM ACCOUNT');
 
+		return res.status(200).json(accounts);
+	}
 
 	//if post request
 	if(req.method !== 'POST') {
@@ -24,12 +33,19 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 
 	}
 
-	return res.status(200).json({requestbody});
 
 	// check value of fileds
 
-	// post data to database
-
+	// insert data into database
+	// InsertNewAccountToDatabase(requestbody.name, requestbody.email, requestbody.phonenumber, requestbody.username, requestbody.password);
 
 	// return response
+
+	return res.status(200).json({requestbody}); // for testing
+}
+
+async function InsertNewAccountToDatabase(name, email, phonenumber, username, password) {
+	// get the database
+	const db = await GetDatabase();
+	// insert data into database
 }
