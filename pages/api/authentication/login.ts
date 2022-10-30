@@ -1,10 +1,15 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { GetDatabase } from '../../../helpers/database/database-helper.mjs';
+import { CheckFields } from '../../../helpers/request/request-helper';
 
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 
+    //check fields
+    if ( CheckFields(req, ['acc_un','acc_mk'], res) !== true) { return; }
+
     const username = req.body.acc_un;
     const password = req.body.acc_mk;
+    console.log(username, password);
     const db = await GetDatabase();
     if(req.method === 'POST') {
         const account = await db.get(`select * from account where acc_un="${username}"`);
