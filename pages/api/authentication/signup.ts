@@ -23,7 +23,9 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 
 	const fields = ['fname', 'lname', 'email', 'phonenumber','username', 'password', 'role'];
 
+	
 	const requestbody = JSON.parse(req.body);
+	
 
 	// check if all fields are present in request body
 	for(const field of fields) {
