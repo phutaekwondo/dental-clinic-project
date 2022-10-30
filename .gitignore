@@ -4,10 +4,11 @@
 /node_modules
 /.pnp
 .pnp.js
-.yarn.lock
+# .yarn.lock
+package-lock.json
 
 #database
-database.sqlite
+# database.sqlite
 
 # testing
 /coverage
