@@ -20,7 +20,7 @@ CREATE TABLE ACCOUNT(
     acc_un TEXT PRIMARY KEY, 
     acc_mk TEXT NOT NULL,
     acc_avatar BLOB,
-    acc_role TEXT
+    acc_role TEXT NOT NULL CHECK(acc_role IN ('admin', 'doctor', 'patient'))
 );
 CREATE TABLE USER(
     u_id INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -31,9 +31,7 @@ CREATE TABLE USER(
     u_phnu TEXT, 
     u_email TEXT,
     acc_un TEXT, 
-    r_id INTEGER NOT NULL,
-    FOREIGN KEY (acc_un) REFERENCES ACCOUNT(acc_un),
-    FOREIGN KEY (r_id) REFERENCES ROLE(r_id)
+    FOREIGN KEY (acc_un) REFERENCES ACCOUNT(acc_un)
 );
 CREATE TABLE DOCTOR(
     d_id INTEGER PRIMARY KEY AUTOINCREMENT,
