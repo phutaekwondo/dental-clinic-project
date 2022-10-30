@@ -4,6 +4,7 @@ import {NextApiRequest, NextApiResponse} from 'next';
 import {open} from 'sqlite';
 import sqlite3 from 'sqlite3';
 import { GetDatabase } from '../../../helpers/database/database-helper.mjs';
+import { CheckFields } from '../../../helpers/request/request-helper';
 
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 	//if get method, for testing
@@ -22,22 +23,15 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 	}
 
 	const fields = ['fname', 'lname', 'email', 'phonenumber','username', 'password', 'role'];
-
-	
-	const requestbody = JSON.parse(req.body);
-	
-
 	// check if all fields are present in request body
-	for(const field of fields) {
-		if(!requestbody[field]) {
-			return res.status(400).json({message: `${field} is missing`});
-		}
-
+	if (CheckFields(req, fields, res) !== true) {
+		return;
 	}
 
 
 	// check value of fileds
 
+	const requestbody = req.body;
 	// insert data into database
 	const insertResult = await InsertNewAccountToDatabase(
 		requestbody.fname, 
