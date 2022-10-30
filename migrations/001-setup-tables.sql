@@ -21,7 +21,7 @@ CREATE TABLE ACCOUNT(
     acc_tk TEXT, 
     acc_mk TEXT NOT NULL,
     acc_avatar BLOB,
-    acc_username TEXT NOT NULL
+    acc_role TEXT NOT NULL CHECK(acc_role IN ('admin', 'doctor', 'patient'))
 );
 CREATE TABLE USER(
     u_id TEXT PRIMARY KEY, 
@@ -31,10 +31,8 @@ CREATE TABLE USER(
     u_sex TEXT CHECK(u_sex IN ('Nam','Nu')), 
     u_phnu TEXT, 
     u_email TEXT,
-    acc_id TEXT NOT NULL, 
-    r_id TEXT NOT NULL,
-    FOREIGN KEY (acc_id) REFERENCES ACCOUNT(acc_id),
-    FOREIGN KEY (r_id) REFERENCES ROLE(r_id)
+    acc_un TEXT, 
+    FOREIGN KEY (acc_un) REFERENCES ACCOUNT(acc_un)
 );
 CREATE TABLE DOCTOR(
     d_id TEXT PRIMARY KEY,
