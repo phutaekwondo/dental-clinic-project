@@ -7,7 +7,7 @@
 .yarn.lock
 
 #database
-database.sqlite
+# database.sqlite
 
 # testing
 /coverage
