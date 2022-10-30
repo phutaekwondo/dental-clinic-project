@@ -12,63 +12,62 @@
 --PRAGMA foreign_keys = OFF;
 
 /* CREATE TABLE */
-CREATE TABLE ROLE(
-    r_id TEXT PRIMARY KEY, 
-    r_name TEXT NOT NULL 
-);
+-- CREATE TABLE ROLE(
+--     r_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+--     r_name TEXT NOT NULL 
+-- );
 CREATE TABLE ACCOUNT(
-    acc_id TEXT PRIMARY KEY, 
-    acc_tk TEXT, 
+    acc_un TEXT PRIMARY KEY, 
     acc_mk TEXT NOT NULL,
     acc_avatar BLOB,
-    acc_username TEXT NOT NULL
+    acc_role TEXT
 );
 CREATE TABLE USER(
-    u_id TEXT PRIMARY KEY, 
+    u_id INTEGER PRIMARY KEY AUTOINCREMENT, 
     u_fname TEXT,
     u_lname TEXT,
     u_date INTEGER, 
     u_sex TEXT CHECK(u_sex IN ('Nam','Nu')), 
     u_phnu TEXT, 
     u_email TEXT,
-    acc_id TEXT NOT NULL, 
-    r_id TEXT NOT NULL,
-    FOREIGN KEY (acc_id) REFERENCES ACCOUNT(acc_id),
+    acc_un TEXT, 
+    r_id INTEGER NOT NULL,
+    FOREIGN KEY (acc_un) REFERENCES ACCOUNT(acc_un),
     FOREIGN KEY (r_id) REFERENCES ROLE(r_id)
 );
 CREATE TABLE DOCTOR(
-    d_id TEXT PRIMARY KEY,
+    d_id INTEGER PRIMARY KEY AUTOINCREMENT,
     d_pos TEXT CHECK(d_pos IN ('Nhan vien','Trương khoa')), 
     d_salr REAL,
     d_odate INTEGER, 
     d_edate INTEGER, 
-    u_id TEXT NOT NULL,
+    u_id INTEGER NOT NULL,
     FOREIGN KEY (u_id) REFERENCES USER(u_id)
 );
 CREATE TABLE ADMIN(
-    a_id TEXT PRIMARY KEY, 
+    a_id INTEGER PRIMARY KEY AUTOINCREMENT, 
     a_salr REAL, 
     a_odate INTEGER, 
     a_edate INTEGER, 
-    u_id TEXT NOT NULL,
+    u_id INTEGER NOT NULL,
     FOREIGN KEY (u_id) REFERENCES USER(u_id)
 );
 CREATE TABLE PATIENT(
-    p_id TEXT PRIMARY KEY, 
+    p_id INTEGER PRIMARY KEY AUTOINCREMENT, 
     p_type TEXT NOT NULL CHECK(p_type IN ('Thuong','Vip')), 
-    u_id TEXT NOT NULL, 
+    u_id INTEGER NOT NULL, 
     FOREIGN KEY (u_id) REFERENCES USER(u_id)
 );
 
 CREATE TABLE BLOG(
-    b_id TEXT PRIMARY KEY, 
+    b_id INTEGER PRIMARY KEY AUTOINCREMENT, 
     b_date INTEGER NOT NULL, 
     b_topic TEXT NOT NULL, 
     b_head TEXT,
     b_body TEXT
 );
 CREATE TABLE SERVICE(
-    s_id TEXT PRIMARY KEY, 
+    s_id INTEGER PRIMARY KEY AUTOINCREMENT, 
     s_name TEXT NOT NULL, 
     s_type TEXT, 
     s_desc TEXT, 
@@ -79,7 +78,7 @@ CREATE TABLE SERVICE(
     s_etime INTEGER
 );
 CREATE TABLE MEDICINE(
-    m_id TEXT PRIMARY KEY, 
+    m_id INTEGER PRIMARY KEY AUTOINCREMENT, 
     m_name TEXT NOT NULL, 
     m_price TEXT NOT NULL, 
     m_orig TEXT, 
@@ -87,32 +86,32 @@ CREATE TABLE MEDICINE(
     m_amnt TEXT
 );
 CREATE TABLE RECORD(
-    rec_id TEXT PRIMARY KEY, 
+    rec_id INTEGER PRIMARY KEY AUTOINCREMENT, 
     rec_day TEXT NOT NULL, 
     rec_dease TEXT, 
     rec_desc TEXT, 
-    appoint_id TEXT NOT NULL,
+    appoint_id INTEGER NOT NULL,
     FOREIGN KEY (appoint_id) REFERENCES APPOINTMENT(appoint_id)
 );
 
 CREATE TABLE BLOG_AUTHOR(
-    d_id TEXT, 
-    b_id TEXT,
+    d_id INTEGER, 
+    b_id INTEGER,
     FOREIGN KEY (d_id) REFERENCES DOCTOR(d_id),
     FOREIGN KEY (b_id) REFERENCES BLOG(b_id),
     PRIMARY KEY (d_id, b_id)
 );
 CREATE TABLE COMMENT(
-    acc_id TEXT NOT NULL, 
-    b_id TEXT NOT NULL, 
+    acc_un INTEGER NOT NULL, 
+    b_id INTEGER NOT NULL, 
     c_content TEXT, 
     c_time INTERGER,
-    FOREIGN KEY (acc_id) REFERENCES ACCOUNT(acc_id),
+    FOREIGN KEY (acc_un) REFERENCES ACCOUNT(acc_un),
     FOREIGN KEY (b_id) REFERENCES BLOG(b_id)
 );
 CREATE TABLE BUYING_LIST(
-    u_id TEXT NOT NULL, 
-    m_id TEXT NOT NULL, 
+    u_id INTEGER NOT NULL, 
+    m_id INTEGER NOT NULL, 
     buy_day INTEGER, 
     amount INTEGER, 
     price REAL,
@@ -120,10 +119,10 @@ CREATE TABLE BUYING_LIST(
     FOREIGN KEY (m_id) REFERENCES MEDICINE(m_id)
 );
 CREATE TABLE APPOINTMENT(
-    appoint_id TEXT PRIMARY KEY,
-    p_id TEXT, 
-    d_id TEXT, 
-    s_id TEXT, 
+    appoint_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    p_id INTEGER, 
+    d_id INTEGER, 
+    s_id INTEGER, 
     meet_day INTEGER,
     meet_otime INTEGER, 
     meet_etime INTEGER, 
@@ -137,10 +136,10 @@ CREATE TABLE APPOINTMENT(
 
 /* INSERT DATA */
 --Role 
-INSERT INTO ROLE VALUES('r01', 'Doctor'), ('r02', 'Patient'), ('r03','Admin');
+-- INSERT INTO ROLE VALUES('r01', 'Doctor'), ('r02', 'Patient'), ('r03','Admin');
 
 -- Account 
-INSERT INTO ACCOUNT VALUES ('acc001',NULL, 'stillcakcak', NULL, 'cakcak');
+-- INSERT INTO ACCOUNT VALUES ('acc001',NULL, 'stillcakcak', NULL, 'cakcak');
 -- INSERT INTO USER VALUES ('u001', 'Nguyen', 'Phu', NULL, NULL, '0987654321', 'phu@gmail.com');
 
 
