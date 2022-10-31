@@ -8,7 +8,7 @@
 --SELECT * FROM DOCTOR WHERE; query data
 --UPDATE DOCTOR SET d_date = STRFTIME('%H:%M', '06:00') WHERE d_id = 'BS01'
 
---DROP TABLE ACCOUNT
+--DROP TABLE PATIENT
 --PRAGMA foreign_keys = OFF;
 
 /* CREATE TABLE */
@@ -16,8 +16,9 @@
 --     r_id INTEGER PRIMARY KEY AUTOINCREMENT, 
 --     r_name TEXT NOT NULL 
 -- );
+
 CREATE TABLE ACCOUNT(
-    acc_username TEXT PRIMARY KEY, 
+    acc_un TEXT PRIMARY KEY, 
     acc_mk TEXT NOT NULL,
     acc_avatar TEXT,  --Lưu đường dẫn tới hình ảnh
     acc_role TEXT NOT NULL CHECK(acc_role IN ('admin', 'doctor', 'patient'))
@@ -34,8 +35,8 @@ CREATE TABLE DOCTOR(
     d_salr REAL,
     d_odate INTEGER,  --Ngày nhậm chức
     d_edate INTEGER,  --Ngày nghỉ việc
-    acc_username INTEGER NOT NULL,
-    FOREIGN KEY (acc_username) REFERENCES ACCOUNT(acc_username)
+    acc_un INTEGER NOT NULL,
+    FOREIGN KEY (acc_un) REFERENCES ACCOUNT(acc_un)
 );
 CREATE TABLE ADMIN(
     a_id INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -47,8 +48,8 @@ CREATE TABLE ADMIN(
     a_salr REAL, 
     a_odate INTEGER, 
     a_edate INTEGER, 
-    acc_username INTEGER NOT NULL,
-    FOREIGN KEY (acc_username) REFERENCES ACCOUNt(acc_username)
+    acc_un INTEGER NOT NULL,
+    FOREIGN KEY (acc_un) REFERENCES ACCOUNt(acc_un)
 );
 CREATE TABLE PATIENT(
     p_id INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -60,7 +61,8 @@ CREATE TABLE PATIENT(
     p_phnu TEXT, 
     p_email TEXT,
     p_type TEXT NOT NULL CHECK(p_type IN ('Thuong','Vip')), 
-    acc_username INTEGER
+    acc_un INTEGER,
+    FOREIGN KEY (acc_un) REFERENCES ACCOUNT(acc_un)
 );
 
 CREATE TABLE BLOG(
@@ -109,20 +111,21 @@ CREATE TABLE BLOG_AUTHOR(
     PRIMARY KEY (d_id, b_id)
 );
 CREATE TABLE COMMENT(
-    acc_username TEXT NOT NULL, 
+    acc_un TEXT NOT NULL, 
     b_id INTEGER NOT NULL, 
     c_content TEXT, 
     c_time INTERGER,
-    FOREIGN KEY (acc_username) REFERENCES ACCOUNT(acc_username),
+    FOREIGN KEY (acc_un) REFERENCES ACCOUNT(acc_un),
     FOREIGN KEY (b_id) REFERENCES BLOG(b_id)
 );
 CREATE TABLE BUYING_LIST(
-    acc_id INTEGER NOT NULL, 
-    m_id INTEGER NOT NULL, 
+    p_id INTEGER, 
+    m_id INTEGER, 
     buy_day INTEGER, 
     amount INTEGER, 
     price REAL,
-    FOREIGN KEY (acc_id) REFERENCES ACCOUNT(acc_id),
+    PRIMARY KEY (p_id,m_id),
+    FOREIGN KEY (p_id) REFERENCES PATIENT(p_id),
     FOREIGN KEY (m_id) REFERENCES MEDICINE(m_id)
 );
 CREATE TABLE APPOINTMENT(
