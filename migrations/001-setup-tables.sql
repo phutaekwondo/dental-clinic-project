@@ -8,7 +8,7 @@
 --SELECT * FROM DOCTOR WHERE; query data
 --UPDATE DOCTOR SET d_date = STRFTIME('%H:%M', '06:00') WHERE d_id = 'BS01'
 
---DROP TABLE 
+--DROP TABLE ACCOUNT
 --PRAGMA foreign_keys = OFF;
 
 /* CREATE TABLE */
@@ -17,7 +17,7 @@
 --     r_name TEXT NOT NULL 
 -- );
 CREATE TABLE ACCOUNT(
-    acc_un TEXT PRIMARY KEY, 
+    acc_username TEXT PRIMARY KEY, 
     acc_mk TEXT NOT NULL,
     acc_avatar BLOB,
     acc_role TEXT NOT NULL CHECK(acc_role IN ('admin', 'doctor', 'patient'))
@@ -35,26 +35,42 @@ CREATE TABLE USER(
 );
 CREATE TABLE DOCTOR(
     d_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    d_pos TEXT CHECK(d_pos IN ('Nhan vien','Trương khoa')), 
+    d_name TEXT NOT NULL,
+    d_sex TEXT CHECK(d_sex IN ('Nam','Nu')), 
+    d_dateOB INTEGER,
+    d_phnu TEXT, 
+    d_email TEXT,
+    d_position TEXT CHECK(d_position IN ('Nhan vien','Trương khoa')), 
     d_salr REAL,
-    d_odate INTEGER, 
-    d_edate INTEGER, 
-    u_id INTEGER NOT NULL,
-    FOREIGN KEY (u_id) REFERENCES USER(u_id)
+    d_odate INTEGER,  --Ngày nhậm chức
+    d_edate INTEGER,  --Ngày nghỉ việc
+    acc_username INTEGER NOT NULL,
+    FOREIGN KEY (acc_username) REFERENCES ACCOUNT(acc_username)
 );
 CREATE TABLE ADMIN(
     a_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    a_name TEXT NOT NULL,
+    a_dateOB INTEGER, 
+    a_sex TEXT CHECK(a_sex IN ('Nam','Nu')), 
+    a_phnu TEXT, 
+    a_email TEXT,
     a_salr REAL, 
     a_odate INTEGER, 
     a_edate INTEGER, 
-    u_id INTEGER NOT NULL,
-    FOREIGN KEY (u_id) REFERENCES USER(u_id)
+    acc_username INTEGER NOT NULL,
+    FOREIGN KEY (acc_username) REFERENCES ACCOUNt(acc_username)
 );
 CREATE TABLE PATIENT(
     p_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    p_name TEXT NOT NULL,
+    p_dateOB INTEGER, 
+    p_sex TEXT CHECK(p_sex IN ('Nam','Nu')), 
+    p_ethnic TEXT,
+    p_BHXH TEXT,
+    p_phnu TEXT, 
+    p_email TEXT,
     p_type TEXT NOT NULL CHECK(p_type IN ('Thuong','Vip')), 
-    u_id INTEGER NOT NULL, 
-    FOREIGN KEY (u_id) REFERENCES USER(u_id)
+    acc_username INTEGER
 );
 
 CREATE TABLE BLOG(
@@ -100,20 +116,20 @@ CREATE TABLE BLOG_AUTHOR(
     PRIMARY KEY (d_id, b_id)
 );
 CREATE TABLE COMMENT(
-    acc_un INTEGER NOT NULL, 
+    acc_username TEXT NOT NULL, 
     b_id INTEGER NOT NULL, 
     c_content TEXT, 
     c_time INTERGER,
-    FOREIGN KEY (acc_un) REFERENCES ACCOUNT(acc_un),
+    FOREIGN KEY (acc_username) REFERENCES ACCOUNT(acc_username),
     FOREIGN KEY (b_id) REFERENCES BLOG(b_id)
 );
 CREATE TABLE BUYING_LIST(
-    u_id INTEGER NOT NULL, 
+    acc_id INTEGER NOT NULL, 
     m_id INTEGER NOT NULL, 
     buy_day INTEGER, 
     amount INTEGER, 
     price REAL,
-    FOREIGN KEY (u_id) REFERENCES USER(u_id),
+    FOREIGN KEY (acc_id) REFERENCES ACCOUNT(acc_id),
     FOREIGN KEY (m_id) REFERENCES MEDICINE(m_id)
 );
 CREATE TABLE APPOINTMENT(
