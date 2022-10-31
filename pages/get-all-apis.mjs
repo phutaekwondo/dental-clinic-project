@@ -20,4 +20,15 @@ export function GetAllAPIsPath ( dir = apidir ) {
     return results;
 };
 
-console.log(GetAllAPIsPath());
+export function GetAllAPIsPathFixed ( dir = apidir ) {
+    const result = GetAllAPIsPath(dir);
+    // remove "./pages/" from the beginning of each path
+    const prefix_removed = result.map(path => path.replace('./pages/', ''));
+
+    // remove extension ".js", ".ts" from the end of each path
+    const extension_removed = prefix_removed.map(path => path.replace(/\.[^/.]+$/, ""));
+
+    return extension_removed;
+};
+
+console.log(GetAllAPIsPathFixed());
