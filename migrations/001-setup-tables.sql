@@ -8,7 +8,7 @@
 --SELECT * FROM DOCTOR WHERE; query data
 --UPDATE DOCTOR SET d_date = STRFTIME('%H:%M', '06:00') WHERE d_id = 'BS01'
 
---DROP TABLE ACCOUNT
+--DROP TABLE PATIENT
 --PRAGMA foreign_keys = OFF;
 
 /* CREATE TABLE */
@@ -16,17 +16,7 @@
 --     r_id INTEGER PRIMARY KEY AUTOINCREMENT, 
 --     r_name TEXT NOT NULL 
 -- );
--- CREATE TABLE USER(
---     u_id INTEGER PRIMARY KEY AUTOINCREMENT, 
---     u_fname TEXT,
---     u_lname TEXT,
---     u_date INTEGER, 
---     u_sex TEXT CHECK(u_sex IN ('Nam','Nu')), 
---     u_phnu TEXT, 
---     u_email TEXT,
---     acc_un TEXT, 
---     FOREIGN KEY (acc_un) REFERENCES ACCOUNT(acc_un)
--- );
+
 CREATE TABLE ACCOUNT(
     acc_un TEXT PRIMARY KEY, 
     acc_mk TEXT NOT NULL,
@@ -73,7 +63,8 @@ CREATE TABLE PATIENT(
     p_phnu TEXT, 
     p_email TEXT,
     p_type TEXT CHECK(p_type IN ('Thuong','Vip')), 
-    acc_un INTEGER
+    acc_un INTEGER,
+    FOREIGN KEY (acc_un) REFERENCES ACCOUNT(acc_un)
 );
 
 CREATE TABLE BLOG(
@@ -127,12 +118,13 @@ CREATE TABLE COMMENT(
     FOREIGN KEY (b_id) REFERENCES BLOG(b_id)
 );
 CREATE TABLE BUYING_LIST(
-    acc_id INTEGER NOT NULL, 
-    m_id INTEGER NOT NULL, 
+    p_id INTEGER, 
+    m_id INTEGER, 
     buy_day INTEGER, 
     amount INTEGER, 
     price REAL,
-    FOREIGN KEY (acc_id) REFERENCES ACCOUNT(acc_id),
+    PRIMARY KEY (p_id,m_id),
+    FOREIGN KEY (p_id) REFERENCES PATIENT(p_id),
     FOREIGN KEY (m_id) REFERENCES MEDICINE(m_id)
 );
 CREATE TABLE APPOINTMENT(
