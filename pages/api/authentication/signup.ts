@@ -12,9 +12,11 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 		//get database
 		const db = await GetDatabase();
 		//get all accounts
-		const accounts = await db.all('SELECT * FROM ACCOUNT');
+		// const accounts = await db.all('SELECT * FROM ACCOUNT');
 
-		return res.status(200).json(accounts);
+		const allaccountdata = await handleGetMethod();
+
+		return res.status(200).json(allaccountdata);
 	}
 
 	//if post request
@@ -50,6 +52,17 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 	// return res.status(200).json({requestbody}); // for testing
 }
 
+async function handleGetMethod(){
+	// return all rows in account, patient, doctor, admin table
+	const db = await GetDatabase();
+	const accounts = await db.all('SELECT * FROM ACCOUNT');
+	const patients = await db.all('SELECT * FROM PATIENT');
+	const doctors = await db.all('SELECT * FROM DOCTOR');
+	const admins = await db.all('SELECT * FROM ADMIN');
+
+	return {accounts, patients, doctors, admins};
+}
+
 async function InsertNewAccountToDatabase(
 	fname, 
 	lname, 
@@ -61,6 +74,11 @@ async function InsertNewAccountToDatabase(
 {
 	// get the database
 	const db = await GetDatabase();
+
+	//testing
+	var table = role;
+	var prefix = role.substring(0, 1) + '_';
+
 
 	//check if username already exists
 	const account = await db.get('SELECT * FROM ACCOUNT WHERE acc_un = ?', [username]);
@@ -78,9 +96,12 @@ async function InsertNewAccountToDatabase(
 	}
 
 	//insert fname, lname, email, phonenumber to user table
+
 	try{
-		const result2 = await db.run('INSERT INTO USER (u_fname, u_lname, u_email, u_phnu, acc_un) VALUES (?, ?, ?, ?, ?)',
-								[fname, lname, email, phonenumber, username]);
+		const query = `INSERT INTO ${table} (${prefix}fname, ${prefix}lname, ${prefix}email, ${prefix}phnu, acc_un) 
+				VALUES (\'${fname}\', \'${lname}\', \'${email}\', \'${phonenumber}\', \'${username}\')`;
+
+		const result2 = await db.run( query );
 	}
 	catch{
 		const result3 = await db.run('DELETE FROM ACCOUNT WHERE acc_un = ?', [username]);
@@ -88,4 +109,11 @@ async function InsertNewAccountToDatabase(
 	}
 
 	return "Signup successfull";
+
+	// console.log(table,prefix);
+	// const query = `INSERT INTO ${table} (${prefix}fname, ${prefix}lname, ${prefix}email, ${prefix}phnu, acc_un) 
+			// VALUES (\'\${fname}\', \'\${lname}\', \'\${email}\', \'\${phonenumber}\', \'\${username}\')`;
+	// console.log(query);
+	// const result2 = await db.run( query );
+	// return "done testing";
 }
