@@ -1,10 +1,4 @@
 {
-  "browser": {
-  "fs": false,
-  "path": false,
-  "os": false
-  },
-
   "name": "dental-clinic-app",
   "version": "0.1.0",
   "private": true,
