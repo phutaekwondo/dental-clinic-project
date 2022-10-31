@@ -35,8 +35,9 @@ export default function Home( { apipaths } ) {
         </h1>
 
         <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
+          Get started by adding {' '}
+          <code className={styles.code}>api path below</code>
+          behind the URL to get the API.
         </p>
 
 		{/* one p tag for each one in apispath */}
