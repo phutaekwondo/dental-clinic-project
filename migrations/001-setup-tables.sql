@@ -17,51 +17,44 @@
 --     r_name TEXT NOT NULL 
 -- );
 CREATE TABLE ACCOUNT(
-    acc_id TEXT PRIMARY KEY AUTOINCREMENT,
-    acc_username TEXT UNIQUE NOT NULL, 
+    acc_un TEXT PRIMARY KEY, 
     acc_mk TEXT NOT NULL,
-    acc_avatar TEXT,  --Lưu đường dẫn tới hình ảnh
+    acc_avatar BLOB,
     acc_role TEXT NOT NULL CHECK(acc_role IN ('admin', 'doctor', 'patient'))
 );
-
+CREATE TABLE USER(
+    u_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    u_fname TEXT,
+    u_lname TEXT,
+    u_date INTEGER, 
+    u_sex TEXT CHECK(u_sex IN ('Nam','Nu')), 
+    u_phnu TEXT, 
+    u_email TEXT,
+    acc_un TEXT, 
+    FOREIGN KEY (acc_un) REFERENCES ACCOUNT(acc_un)
+);
 CREATE TABLE DOCTOR(
     d_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    d_name TEXT NOT NULL,
-    d_sex TEXT CHECK(u_sex IN ('Nam','Nu')), 
-    d_dateOB INTEGER,
-    d_phnu TEXT, 
-    d_email TEXT,
-    d_position TEXT CHECK(d_pos IN ('Nhan vien','Trương khoa')), 
+    d_pos TEXT CHECK(d_pos IN ('Nhan vien','Trương khoa')), 
     d_salr REAL,
-    d_odate INTEGER,  --Ngày nhậm chức
-    d_edate INTEGER,  --Ngày nghỉ việc
-    acc_id INTEGER NOT NULL,
-    FOREIGN KEY (acc_id) REFERENCES ACCOUNT(acc_id)
+    d_odate INTEGER, 
+    d_edate INTEGER, 
+    u_id INTEGER NOT NULL,
+    FOREIGN KEY (u_id) REFERENCES USER(u_id)
 );
 CREATE TABLE ADMIN(
     a_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-    a_name TEXT NOT NULL,
-    a_dateOB INTEGER, 
-    a_sex TEXT CHECK(u_sex IN ('Nam','Nu')), 
-    a_phnu TEXT, 
-    a_email TEXT,
     a_salr REAL, 
     a_odate INTEGER, 
     a_edate INTEGER, 
-    acc_id INTEGER NOT NULL,
-    FOREIGN KEY (acc_id) REFERENCES ACCOUNt(acc_id)
+    u_id INTEGER NOT NULL,
+    FOREIGN KEY (u_id) REFERENCES USER(u_id)
 );
 CREATE TABLE PATIENT(
     p_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-    p_name TEXT NOT NULL,
-    p_dateOB INTEGER, 
-    p_sex TEXT CHECK(u_sex IN ('Nam','Nu')), 
-    p_ethnic TEXT,
-    p_BHXH TEXT,
-    p_phnu TEXT, 
-    p_email TEXT,
     p_type TEXT NOT NULL CHECK(p_type IN ('Thuong','Vip')), 
-    acc_id INTEGER
+    u_id INTEGER NOT NULL, 
+    FOREIGN KEY (u_id) REFERENCES USER(u_id)
 );
 
 CREATE TABLE BLOG(
@@ -79,8 +72,8 @@ CREATE TABLE SERVICE(
     s_price REAL, 
     s_oday INTEGER, 
     s_eday INTEGER, 
-    s_otime INTEGER, --Giờ mở cửa - open time
-    s_etime INTEGER  --Giờ đóng cửa - end time
+    s_otime INTEGER, 
+    s_etime INTEGER
 );
 CREATE TABLE MEDICINE(
     m_id INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -92,13 +85,10 @@ CREATE TABLE MEDICINE(
 );
 CREATE TABLE RECORD(
     rec_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-    d_id TEXT NOT NULL,
-    p_id TEXT NOT NULL,
-    rec_date INTEGER NOT NULL, 
-    rec_dease TEXT,
-    appoint_id INTEGER,
-    FOREIGN KEY (d_id) REFERENCES DOCTOR(d_id),
-    FOREIGN KEY (p_id) REFERENCES PATIENT(p_id),
+    rec_day TEXT NOT NULL, 
+    rec_dease TEXT, 
+    rec_desc TEXT, 
+    appoint_id INTEGER NOT NULL,
     FOREIGN KEY (appoint_id) REFERENCES APPOINTMENT(appoint_id)
 );
 
