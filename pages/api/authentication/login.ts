@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { GetDatabase } from '../../../helpers/database/database-helper.mjs';
 import { CheckFields } from '../../../helpers/request/request-helper';
+import Person from '../../../classes/person.mjs';
 
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 
@@ -10,9 +11,8 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     const username = req.body.acc_un;
     const password = req.body.acc_mk;
 
-    const db = await GetDatabase();
     if(req.method === 'POST') {
-        const account = await db.get(`select * from account where acc_un="${username}"`);
+        const account = await Person.GetAccountByUsername(username);
         if(!account) {
             res.json({message: 'We do not have this account'})
         }else{

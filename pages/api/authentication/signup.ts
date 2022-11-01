@@ -1,10 +1,11 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 // import api resquest response from next
 import {NextApiRequest, NextApiResponse} from 'next';
-import {open} from 'sqlite';
-import sqlite3 from 'sqlite3';
 import { GetDatabase } from '../../../helpers/database/database-helper.mjs';
 import { CheckFields } from '../../../helpers/request/request-helper';
+import Patient from '../../../classes/patient.mjs';
+import Doctor from '../../../classes/doctor.mjs';
+import Admin from '../../../classes/admin.mjs';
 
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 	//if get method, for testing
@@ -30,26 +31,36 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 		return;
 	}
 
+	const requestBody = req.body;
 
-	// check value of fileds
+	//check if requestBody.role in ('patient', 'doctor', 'admin')
+	if(requestBody.role !== 'patient' && requestBody.role !== 'doctor' && requestBody.role !== 'admin'){
+		return res.status(400).json({message: 'Role must be patient, doctor or admin'});
+	}
 
-	const requestbody = req.body;
-	// insert data into database
-	const insertResult = await InsertNewAccountToDatabase(
-		requestbody.fname, 
-		requestbody.lname, 
-		requestbody.email, 
-		requestbody.phonenumber, 
-		requestbody.username, 
-		requestbody.password, 
-		requestbody.role
-		);
+	//signup hanler
+	var newPerson;
+	switch(requestBody.role){
+		    case "patient":
+				newPerson = new Patient( requestBody.fname, requestBody.lname, requestBody.email, requestBody.phonenumber, true);
+				break;
+		    case "doctor":
+				newPerson = new Doctor( requestBody.fname, requestBody.lname, requestBody.email, requestBody.phonenumber);
+				break;
+			case "admin":
+				newPerson = new Admin( requestBody.fname, requestBody.lname, requestBody.email, requestBody.phonenumber);
+				break;
+	}
 
-	return res.status(200).json({message: insertResult});
+	newPerson.RegisterAccount(requestBody.username, requestBody.password, requestBody.role);
+	const result = await newPerson.InsertToDatabase();
 
-	// return response
-
-	// return res.status(200).json({requestbody}); // for testing
+	if (result === true ) {
+		return res.status(200).json({message: 'Account created successfully'});
+	}
+	else{
+		return res.status(400).json({message: result});
+	}
 }
 
 async function handleGetMethod(){
@@ -61,59 +72,4 @@ async function handleGetMethod(){
 	const admins = await db.all('SELECT * FROM ADMIN');
 
 	return {accounts, patients, doctors, admins};
-}
-
-async function InsertNewAccountToDatabase(
-	fname, 
-	lname, 
-	email, 
-	phonenumber, 
-	username, 
-	password, 
-	role) 
-{
-	// get the database
-	const db = await GetDatabase();
-
-	//testing
-	var table = role;
-	var prefix = role.substring(0, 1) + '_';
-
-
-	//check if username already exists
-	const account = await db.get('SELECT * FROM ACCOUNT WHERE acc_un = ?', [username]);
-	if(account) {
-		return "username already exists";
-	}
-
-	//insert unsername, password and role to account table
-	try {
-		const result = await db.run('INSERT INTO ACCOUNT (acc_un, acc_mk, acc_role) VALUES (?, ?, ?)', 
-								[username, password, role]);
-	}
-	catch{
-		return "somthing wrong while inserting username, password, role, make sure role in (amin, doctor, patient)";
-	}
-
-	//insert fname, lname, email, phonenumber to user table
-
-	try{
-		const query = `INSERT INTO ${table} (${prefix}fname, ${prefix}lname, ${prefix}email, ${prefix}phnu, acc_un) 
-				VALUES (\'${fname}\', \'${lname}\', \'${email}\', \'${phonenumber}\', \'${username}\')`;
-
-		const result2 = await db.run( query );
-	}
-	catch{
-		const result3 = await db.run('DELETE FROM ACCOUNT WHERE acc_un = ?', [username]);
-		return "somthing wrong while inserting fname, lname, email, phonenumber";
-	}
-
-	return "Signup successfull";
-
-	// console.log(table,prefix);
-	// const query = `INSERT INTO ${table} (${prefix}fname, ${prefix}lname, ${prefix}email, ${prefix}phnu, acc_un) 
-			// VALUES (\'\${fname}\', \'\${lname}\', \'\${email}\', \'\${phonenumber}\', \'\${username}\')`;
-	// console.log(query);
-	// const result2 = await db.run( query );
-	// return "done testing";
 }
