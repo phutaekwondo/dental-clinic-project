@@ -16,7 +16,7 @@ npm run dev
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). There will be a page that show what APIs we have
+Open [http://localhost:3000](http://localhost:3000). There will be a page that show how many APIs we have
 
 ## Write APIs
 The `pages/api` contain our APIs, create files and write in it. Work hard, bro!
