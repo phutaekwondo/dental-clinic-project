@@ -1,4 +1,5 @@
 import { GetDatabase } from "../helpers/database/database-helper.mjs";
+
 // a class person has all properties in patient table 
 export default class Person{
 	id           ;
@@ -93,6 +94,7 @@ export default class Person{
 
 		return accounts;
 	};
+
 	static async GetAccountByUsername(username){
 		const db = await GetDatabase();
         	const account = await db.get(`select * from account where acc_un="${username}"`);
@@ -100,6 +102,5 @@ export default class Person{
 		return account;
 	}
 
-	static async GetPersonByUsername(username){/*NEED IMPLEMENT*/};
 }
 

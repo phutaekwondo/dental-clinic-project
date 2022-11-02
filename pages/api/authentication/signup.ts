@@ -6,6 +6,7 @@ import { CheckFields } from '../../../helpers/request/request-helper';
 import Patient from '../../../classes/patient.mjs';
 import Doctor from '../../../classes/doctor.mjs';
 import Admin from '../../../classes/admin.mjs';
+import PersonFactory from '../../../classes/person-factory.mjs';
 
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 	//if get method, for testing
@@ -39,19 +40,19 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 	}
 
 	//signup hanler
-	var newPerson;
-	switch(requestBody.role){
-		    case "patient":
-				newPerson = new Patient( requestBody.fname, requestBody.lname, requestBody.email, requestBody.phonenumber, true);
-				break;
-		    case "doctor":
-				newPerson = new Doctor( requestBody.fname, requestBody.lname, requestBody.email, requestBody.phonenumber);
-				break;
-			case "admin":
-				newPerson = new Admin( requestBody.fname, requestBody.lname, requestBody.email, requestBody.phonenumber);
-				break;
-	}
-
+	// var newPerson;
+	// switch(requestBody.role){
+	// 	    case "patient":
+	// 			newPerson = new Patient( requestBody.fname, requestBody.lname, requestBody.email, requestBody.phonenumber, true);
+	// 			break;
+	// 	    case "doctor":
+	// 			newPerson = new Doctor( requestBody.fname, requestBody.lname, requestBody.email, requestBody.phonenumber);
+	// 			break;
+	// 		case "admin":
+	// 			newPerson = new Admin( requestBody.fname, requestBody.lname, requestBody.email, requestBody.phonenumber);
+	// 			break;
+	// }
+	var newPerson = await PersonFactory.NewPersonInstanceWithRole(requestBody.fname, requestBody.lname, requestBody.email, requestBody.phonenumber, true, requestBody.role);
 	newPerson.RegisterAccount(requestBody.username, requestBody.password, requestBody.role);
 	const result = await newPerson.InsertToDatabase();
 
