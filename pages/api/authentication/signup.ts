@@ -39,19 +39,6 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 		return res.status(400).json({message: 'Role must be patient, doctor or admin'});
 	}
 
-	//signup hanler
-	// var newPerson;
-	// switch(requestBody.role){
-	// 	    case "patient":
-	// 			newPerson = new Patient( requestBody.fname, requestBody.lname, requestBody.email, requestBody.phonenumber, true);
-	// 			break;
-	// 	    case "doctor":
-	// 			newPerson = new Doctor( requestBody.fname, requestBody.lname, requestBody.email, requestBody.phonenumber);
-	// 			break;
-	// 		case "admin":
-	// 			newPerson = new Admin( requestBody.fname, requestBody.lname, requestBody.email, requestBody.phonenumber);
-	// 			break;
-	// }
 	var newPerson = await PersonFactory.NewPersonInstanceWithRole(requestBody.fname, requestBody.lname, requestBody.email, requestBody.phonenumber, true, requestBody.role);
 	newPerson.RegisterAccount(requestBody.username, requestBody.password, requestBody.role);
 	const result = await newPerson.InsertToDatabase();
