@@ -9,23 +9,6 @@ import Admin from '../../../classes/admin.mjs';
 import PersonFactory from '../../../classes/person-factory.mjs';
 
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
-	//if get method, for testing
-	if(req.method === 'GET'){
-		//get database
-		const db = await GetDatabase();
-		//get all accounts
-		// const accounts = await db.all('SELECT * FROM ACCOUNT');
-
-		const allaccountdata = await handleGetMethod();
-
-		return res.status(200).json(allaccountdata);
-	}
-
-	//if post request
-	if(req.method !== 'POST') {
-		return res.status(405).json({message: 'Only POST Method is allowed'});
-	}
-
 	const fields = ['fname', 'lname', 'email', 'phonenumber','username', 'password', 'role'];
 	// check if all fields are present in request body
 	if (CheckFields(req, fields, res) !== true) {
@@ -49,15 +32,4 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 	else{
 		return res.status(400).json({message: result});
 	}
-}
-
-async function handleGetMethod(){
-	// return all rows in account, patient, doctor, admin table
-	const db = await GetDatabase();
-	const accounts = await db.all('SELECT * FROM ACCOUNT');
-	const patients = await db.all('SELECT * FROM PATIENT');
-	const doctors = await db.all('SELECT * FROM DOCTOR');
-	const admins = await db.all('SELECT * FROM ADMIN');
-
-	return {accounts, patients, doctors, admins};
 }
