@@ -7,19 +7,7 @@ import Patient from '../../../classes/patient.mjs';
 import Doctor from '../../../classes/doctor.mjs';
 import Admin from '../../../classes/admin.mjs';
 
-export default async function handler(req:NextApiRequest, res:NextApiResponse) {
-	//if get method, for testing
-	if(req.method === 'GET'){
-		//get database
-		const db = await GetDatabase();
-		//get all accounts
-		// const accounts = await db.all('SELECT * FROM ACCOUNT');
-
-		const allaccountdata = await handleGetMethod();
-
-		return res.status(200).json(allaccountdata);
-	}
-
+export default async function handler(req:NextApiRequest, res:NextApiResponse) 
 	//if post request
 	if(req.method !== 'POST') {
 		return res.status(405).json({message: 'Only POST Method is allowed'});
