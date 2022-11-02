@@ -6,6 +6,7 @@ import { CheckFields } from '../../../helpers/request/request-helper';
 import Patient from '../../../classes/patient.mjs';
 import Doctor from '../../../classes/doctor.mjs';
 import Admin from '../../../classes/admin.mjs';
+import PersonFactory from '../../../classes/person-factory.mjs';
 
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 	const fields = ['fname', 'lname', 'email', 'phonenumber','username', 'password', 'role'];
@@ -21,20 +22,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 		return res.status(400).json({message: 'Role must be patient, doctor or admin'});
 	}
 
-	//signup hanler
-	var newPerson;
-	switch(requestBody.role){
-		    case "patient":
-				newPerson = new Patient( requestBody.fname, requestBody.lname, requestBody.email, requestBody.phonenumber, true);
-				break;
-		    case "doctor":
-				newPerson = new Doctor( requestBody.fname, requestBody.lname, requestBody.email, requestBody.phonenumber);
-				break;
-			case "admin":
-				newPerson = new Admin( requestBody.fname, requestBody.lname, requestBody.email, requestBody.phonenumber);
-				break;
-	}
-
+	var newPerson = await PersonFactory.NewPersonInstanceWithRole(requestBody.fname, requestBody.lname, requestBody.email, requestBody.phonenumber, true, requestBody.role);
 	newPerson.RegisterAccount(requestBody.username, requestBody.password, requestBody.role);
 	const result = await newPerson.InsertToDatabase();
 
