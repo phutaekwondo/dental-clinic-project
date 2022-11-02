@@ -129,6 +129,7 @@ CREATE TABLE BUYING_LIST(
 );
 CREATE TABLE APPOINTMENT(
     appoint_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    appoint_status TEXT CHECK(appoint_status IN ('waiting','approved','canceled')),
     p_id INTEGER, 
     d_id INTEGER, 
     s_id INTEGER, 
