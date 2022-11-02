@@ -7,12 +7,7 @@ import Patient from '../../../classes/patient.mjs';
 import Doctor from '../../../classes/doctor.mjs';
 import Admin from '../../../classes/admin.mjs';
 
-export default async function handler(req:NextApiRequest, res:NextApiResponse) 
-	//if post request
-	if(req.method !== 'POST') {
-		return res.status(405).json({message: 'Only POST Method is allowed'});
-	}
-
+export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 	const fields = ['fname', 'lname', 'email', 'phonenumber','username', 'password', 'role'];
 	// check if all fields are present in request body
 	if (CheckFields(req, fields, res) !== true) {
@@ -49,15 +44,4 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse)
 	else{
 		return res.status(400).json({message: result});
 	}
-}
-
-async function handleGetMethod(){
-	// return all rows in account, patient, doctor, admin table
-	const db = await GetDatabase();
-	const accounts = await db.all('SELECT * FROM ACCOUNT');
-	const patients = await db.all('SELECT * FROM PATIENT');
-	const doctors = await db.all('SELECT * FROM DOCTOR');
-	const admins = await db.all('SELECT * FROM ADMIN');
-
-	return {accounts, patients, doctors, admins};
 }
