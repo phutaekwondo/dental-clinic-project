@@ -7,6 +7,12 @@
 # .yarn.lock
 package-lock.json
 
+#testing on local
+test.mts
+test.ts
+test.js
+test.mjs
+
 #database
 # database.sqlite
 

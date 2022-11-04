@@ -16,7 +16,13 @@ CREATE TABLE ACCOUNT(
 
 CREATE TABLE DOCTOR(
     d_id INTEGER PRIMARY KEY AUTOINCREMENT,
+<<<<<<< HEAD
     d_name TEXT NOT NULL, 
+=======
+    d_fname TEXT NOT NULL,
+    d_lname TEXT NOT NULL,
+    d_sex TEXT CHECK(d_sex IN ('Nam','Nu')), 
+>>>>>>> a4b457406584d8ee0e9af9337db3cd8a39fb05f4
     d_dateOB INTEGER,
     d_sex TEXT CHECK(d_sex IN ('Nam','Nữ')),
     d_phnu TEXT, 
@@ -30,7 +36,8 @@ CREATE TABLE DOCTOR(
 );
 CREATE TABLE ADMIN(
     a_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-    a_name TEXT NOT NULL,
+    a_fname TEXT NOT NULL,
+    a_lname TEXT NOT NULL,
     a_dateOB INTEGER, 
     a_sex TEXT CHECK(a_sex IN ('Nam','Nữ')), 
     a_phnu TEXT, 
@@ -43,14 +50,19 @@ CREATE TABLE ADMIN(
 );
 CREATE TABLE PATIENT(
     p_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-    p_name TEXT NOT NULL,
+    p_fname TEXT NOT NULL,
+    p_lname TEXT NOT NULL,
     p_dateOB INTEGER, 
     p_sex TEXT CHECK(p_sex IN ('Nam','Nữ')), 
     p_ethnic TEXT,
     p_BHXH TEXT,
     p_phnu TEXT, 
     p_email TEXT,
+<<<<<<< HEAD
     p_type TEXT NOT NULL CHECK(p_type IN ('Thường','Vip')), 
+=======
+    p_type TEXT CHECK(p_type IN ('Thuong','Vip')), 
+>>>>>>> a4b457406584d8ee0e9af9337db3cd8a39fb05f4
     acc_un INTEGER,
     FOREIGN KEY (acc_un) REFERENCES ACCOUNT(acc_un)
 );
@@ -118,6 +130,7 @@ CREATE TABLE BUY_LIST(
 );
 CREATE TABLE APPOINTMENT(
     appoint_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    appoint_status TEXT CHECK(appoint_status IN ('waiting','approved','canceled')),
     p_id INTEGER, 
     d_id INTEGER, 
     s_id INTEGER, 
