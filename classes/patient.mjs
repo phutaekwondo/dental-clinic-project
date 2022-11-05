@@ -1,5 +1,6 @@
 import Person from "./person.mjs";
 import { GetDatabase } from "../helpers/database/database-helper.mjs";
+import Appointment from "./appointment.mjs";
 
 //a clas that inherate from Person
 export default class Patient extends Person{
@@ -28,9 +29,8 @@ export default class Patient extends Person{
 
 	async GetAppointments(){
 		if ( this.id){
-			const db = await GetDatabase();
-			const appointments = await db.all('SELECT * FROM APPOINTMENT WHERE p_id = ?', [this.id]);
-			return appointments;
+			const result = await Appointment.GetAllAppointmentsByPatientId(this.id);
+			return result;
 		}
 		return "No id of patient instance"; 
 	}
