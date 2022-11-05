@@ -10,6 +10,10 @@ export default class Patient extends Person{
 		this.hasAccount = hasAccount;
 	}
 
+	RegisterAccount(username, password){
+		super.RegisterAccount(username, password, 'patient');
+	}
+
 	async InsertToDatabase(){
 		// const supResult = super.InsertToDatabase();
 		// if (supResult !== true ) return supResult;
@@ -19,6 +23,11 @@ export default class Patient extends Person{
 		// insert patient to database
 
 		return this.InsertByRole('patient');
+	}
 
+	async GetAppointments(){
+		const db = await GetDatabase();
+		const appointments = await db.all('SELECT * FROM APPOINTMENT WHERE p_id = ?', [this.id]);
+		return appointments;
 	}
 }

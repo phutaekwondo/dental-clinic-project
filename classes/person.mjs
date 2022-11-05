@@ -68,7 +68,7 @@ export default class Person{
 		//insert fname, lname, email, phonenumber to user table
 		try{
 			const query = `INSERT INTO ${table} (${prefix}name, ${prefix}email, ${prefix}phnu, acc_un) 
-					VALUES (\'${this.fname}\', \'${this.email}\', \'${this.phonenumber}\', \'${this.acc_un}\')`;
+					VALUES (\'${this.name}\', \'${this.email}\', \'${this.phonenumber}\', \'${this.acc_un}\')`;
 
 			const result2 = await db.run( query );
 
@@ -77,7 +77,7 @@ export default class Person{
 		}
 		catch{
 			const result3 = await db.run('DELETE FROM ACCOUNT WHERE acc_un = ?', [this.acc_un]);
-			return "somthing wrong while inserting fname, lname, email, phonenumber";
+			return "somthing wrong while inserting name, email, phonenumber";
 		}
 
 		return true;

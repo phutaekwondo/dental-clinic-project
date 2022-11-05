@@ -19,7 +19,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 	}
 
 	var newPerson = await PersonFactory.NewPersonInstanceWithRole(requestBody.name, requestBody.email, requestBody.phonenumber, true, requestBody.role);
-	newPerson.RegisterAccount(requestBody.username, requestBody.password, requestBody.role);
+	newPerson.RegisterAccount(requestBody.username, requestBody.password);
 	const result = await newPerson.InsertToDatabase();
 
 	if (result === true ) {
