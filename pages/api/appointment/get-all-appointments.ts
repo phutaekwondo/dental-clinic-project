@@ -16,7 +16,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 		}
 		else{
 			const result = await Appointment.GetAllAppointments();
-			return res.status(200).json(result);
+			return res.status(200).json({result, message: 'add patient_id to request body to get only patient appointments'});
 		}
 	}
 	catch{
