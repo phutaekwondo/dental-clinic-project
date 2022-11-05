@@ -26,8 +26,17 @@ export default class Patient extends Person{
 	}
 
 	async GetAppointments(){
-		const db = await GetDatabase();
-		const appointments = await db.all('SELECT * FROM APPOINTMENT WHERE p_id = ?', [this.id]);
-		return appointments;
+		if ( this.id){
+			const db = await GetDatabase();
+			const appointments = await db.all('SELECT * FROM APPOINTMENT WHERE p_id = ?', [this.id]);
+			return appointments;
+		}
+		return "No id of patient instance"; 
+	}
+
+	static async GetPatientById(id){
+		var patient = new Patient();
+		patient.GetPrpertiesByIdAndRole(id, 'patient');
+		return patient;
 	}
 }

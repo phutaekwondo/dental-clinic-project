@@ -7,8 +7,9 @@ import PersonFactory from '../../../classes/person-factory.mjs';
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 	const fields = ['name', 'email', 'phonenumber','username', 'password', 'role'];
 	// check if all fields are present in request body
-	if (CheckFields(req, fields, res) !== true) {
-		return;
+	const checkFieldsResult = CheckFields(req, fields, res);
+	if (checkFieldsResult !== true) {
+		return res.status(400).json({message: checkFieldsResult});
 	}
 
 	const requestBody = req.body;

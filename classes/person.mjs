@@ -83,8 +83,22 @@ export default class Person{
 		return true;
 	};
 
+	async GetPrpertiesByIdAndRole(id, role){
+		const db = await GetDatabase();
+		const table = role;
+		const prefix = role.substring(0, 1) + '_';
 
-//a static method
+		const person = await db.get(`select * from ${table} where ${prefix}id="${id}"`);
+		if ( person ){
+			this.id = person[`${prefix}id`];
+			this.name = person[`${prefix}name`];
+			this.email = person[`${prefix}email`];
+			this.phonenumber = person[`${prefix}phnu`];
+			this.acc_un = person[`acc_un`];
+		}
+	}
+
+	//a static method
 	static async GetAllAccounts(){
 		// return all rows in account, patient, doctor, admin table
 		const db = await GetDatabase();
