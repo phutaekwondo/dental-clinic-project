@@ -3,8 +3,7 @@ import { GetDatabase } from "../helpers/database/database-helper.mjs";
 // a class person has all properties in patient table 
 export default class Person{
 	id           ;
-	fname        ;
-	lname        ;
+	name        ;
 	email        ;
 	phonenumber  ;
 	hasAccount   ;
@@ -13,9 +12,8 @@ export default class Person{
 	acc_role     ;
 
 //method
-	constructor(fname, lname, email, phonenumber, hasAccount = false){
-		this.fname = fname;
-		this.lname = lname;
+	constructor(fname, email, phonenumber, hasAccount = false){
+		this.name = fname;
 		this.email = email;
 		this.phonenumber = phonenumber;
 		this.hasAccount = false;
@@ -69,8 +67,8 @@ export default class Person{
 
 		//insert fname, lname, email, phonenumber to user table
 		try{
-			const query = `INSERT INTO ${table} (${prefix}fname, ${prefix}lname, ${prefix}email, ${prefix}phnu, acc_un) 
-					VALUES (\'${this.fname}\', \'${this.lname}\', \'${this.email}\', \'${this.phonenumber}\', \'${this.acc_un}\')`;
+			const query = `INSERT INTO ${table} (${prefix}name, ${prefix}email, ${prefix}phnu, acc_un) 
+					VALUES (\'${this.fname}\', \'${this.email}\', \'${this.phonenumber}\', \'${this.acc_un}\')`;
 
 			const result2 = await db.run( query );
 

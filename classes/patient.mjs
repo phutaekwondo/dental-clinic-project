@@ -5,8 +5,8 @@ export default class Patient extends Person{
 	hasAccount;
 
 //constructor
-	constructor(fname, lname, email, phonenumber, hasAccount){
-		super(fname, lname, email, phonenumber);
+	constructor(name,  email, phonenumber, hasAccount){
+		super(name,  email, phonenumber);
 		this.hasAccount = hasAccount;
 	}
 
