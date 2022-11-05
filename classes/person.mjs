@@ -95,6 +95,10 @@ export default class Person{
 			this.email = person[`${prefix}email`];
 			this.phonenumber = person[`${prefix}phnu`];
 			this.acc_un = person[`acc_un`];
+			return true;
+		}
+		else{
+			return "person not found";
 		}
 	}
 

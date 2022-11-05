@@ -1,4 +1,5 @@
 import Person from "./person.mjs";
+import { GetDatabase } from "../helpers/database/database-helper.mjs";
 
 //a clas that inherate from Person
 export default class Patient extends Person{
@@ -36,7 +37,8 @@ export default class Patient extends Person{
 
 	static async GetPatientById(id){
 		var patient = new Patient();
-		patient.GetPrpertiesByIdAndRole(id, 'patient');
+		const result = await patient.GetPrpertiesByIdAndRole(id, 'patient');
+		if ( result !== true ) console.log(result);
 		return patient;
 	}
 }
