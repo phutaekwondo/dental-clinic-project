@@ -1,4 +1,5 @@
 import Person from "./person.mjs";
+import { GetDatabase } from "../helpers/database/database-helper.mjs";
 
 //a clas that inherate from Person
 export default class Patient extends Person{
@@ -10,6 +11,10 @@ export default class Patient extends Person{
 		this.hasAccount = hasAccount;
 	}
 
+	RegisterAccount(username, password){
+		super.RegisterAccount(username, password, 'patient');
+	}
+
 	async InsertToDatabase(){
 		// const supResult = super.InsertToDatabase();
 		// if (supResult !== true ) return supResult;
@@ -19,6 +24,21 @@ export default class Patient extends Person{
 		// insert patient to database
 
 		return this.InsertByRole('patient');
+	}
 
+	async GetAppointments(){
+		if ( this.id){
+			const db = await GetDatabase();
+			const appointments = await db.all('SELECT * FROM APPOINTMENT WHERE p_id = ?', [this.id]);
+			return appointments;
+		}
+		return "No id of patient instance"; 
+	}
+
+	static async GetPatientById(id){
+		var patient = new Patient();
+		const result = await patient.GetPrpertiesByIdAndRole(id, 'patient');
+		if ( result !== true ) console.log(result);
+		return patient;
 	}
 }

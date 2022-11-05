@@ -10,6 +10,10 @@ export default class Doctor extends Person{
 		this.hasAccount = true;
 	}
 
+	RegisterAccount(username, password){
+		super.RegisterAccount(username, password, 'doctor');
+	}
+
 	async InsertToDatabase(){
 		// const supResult = super.InsertToDatabase();
 		// if (supResult !== true ) return supResult;

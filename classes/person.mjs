@@ -68,7 +68,7 @@ export default class Person{
 		//insert fname, lname, email, phonenumber to user table
 		try{
 			const query = `INSERT INTO ${table} (${prefix}name, ${prefix}email, ${prefix}phnu, acc_un) 
-					VALUES (\'${this.fname}\', \'${this.email}\', \'${this.phonenumber}\', \'${this.acc_un}\')`;
+					VALUES (\'${this.name}\', \'${this.email}\', \'${this.phonenumber}\', \'${this.acc_un}\')`;
 
 			const result2 = await db.run( query );
 
@@ -77,14 +77,32 @@ export default class Person{
 		}
 		catch{
 			const result3 = await db.run('DELETE FROM ACCOUNT WHERE acc_un = ?', [this.acc_un]);
-			return "somthing wrong while inserting fname, lname, email, phonenumber";
+			return "somthing wrong while inserting name, email, phonenumber";
 		}
 
 		return true;
 	};
 
+	async GetPrpertiesByIdAndRole(id, role){
+		const db = await GetDatabase();
+		const table = role;
+		const prefix = role.substring(0, 1) + '_';
 
-//a static method
+		const person = await db.get(`select * from ${table} where ${prefix}id="${id}"`);
+		if ( person ){
+			this.id = person[`${prefix}id`];
+			this.name = person[`${prefix}name`];
+			this.email = person[`${prefix}email`];
+			this.phonenumber = person[`${prefix}phnu`];
+			this.acc_un = person[`acc_un`];
+			return true;
+		}
+		else{
+			return "person not found";
+		}
+	}
+
+	//a static method
 	static async GetAllAccounts(){
 		// return all rows in account, patient, doctor, admin table
 		const db = await GetDatabase();

@@ -1,18 +1,15 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 // import api resquest response from next
 import {NextApiRequest, NextApiResponse} from 'next';
-import { GetDatabase } from '../../../helpers/database/database-helper.mjs';
 import { CheckFields } from '../../../helpers/request/request-helper';
-import Patient from '../../../classes/patient.mjs';
-import Doctor from '../../../classes/doctor.mjs';
-import Admin from '../../../classes/admin.mjs';
 import PersonFactory from '../../../classes/person-factory.mjs';
 
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 	const fields = ['name', 'email', 'phonenumber','username', 'password', 'role'];
 	// check if all fields are present in request body
-	if (CheckFields(req, fields, res) !== true) {
-		return;
+	const checkFieldsResult = CheckFields(req, fields, res);
+	if (checkFieldsResult !== true) {
+		return res.status(400).json({message: checkFieldsResult});
 	}
 
 	const requestBody = req.body;
@@ -23,7 +20,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 	}
 
 	var newPerson = await PersonFactory.NewPersonInstanceWithRole(requestBody.name, requestBody.email, requestBody.phonenumber, true, requestBody.role);
-	newPerson.RegisterAccount(requestBody.username, requestBody.password, requestBody.role);
+	newPerson.RegisterAccount(requestBody.username, requestBody.password);
 	const result = await newPerson.InsertToDatabase();
 
 	if (result === true ) {
