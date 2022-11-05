@@ -1,11 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 // import api resquest response from next
 import {NextApiRequest, NextApiResponse} from 'next';
-import { GetDatabase } from '../../../helpers/database/database-helper.mjs';
 import { CheckFields } from '../../../helpers/request/request-helper';
-import Patient from '../../../classes/patient.mjs';
-import Doctor from '../../../classes/doctor.mjs';
-import Admin from '../../../classes/admin.mjs';
 import PersonFactory from '../../../classes/person-factory.mjs';
 
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
