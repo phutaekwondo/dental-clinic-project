@@ -5,8 +5,8 @@ export default class Admin extends Person{
 	hasAccount;
 
 //constructor
-	constructor(fname, lname, email, phonenumber){
-		super(fname, lname, email, phonenumber);
+	constructor(name, email, phonenumber){
+		super(name, email, phonenumber);
 		this.hasAccount = true;
 	}
 
