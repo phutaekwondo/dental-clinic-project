@@ -10,6 +10,10 @@ export default class Admin extends Person{
 		this.hasAccount = true;
 	}
 
+	RegisterAccount(username, password){
+		super.RegisterAccount(username, password, 'admin');
+	}
+
 	async InsertToDatabase(){
 		// const supResult = super.InsertToDatabase();
 		// if (supResult !== true ) return supResult;

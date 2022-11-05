@@ -6,7 +6,10 @@ import Person from '../../../classes/person.mjs';
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 
     //check fields
-    if ( CheckFields(req, ['acc_un','acc_mk'], res) !== true) { return; }
+	const checkFieldsResult = CheckFields(req,['acc_un','acc_mk'] , res);
+	if (checkFieldsResult !== true) {
+		return res.status(400).json({message: checkFieldsResult});
+	}
 
     const username = req.body.acc_un;
     const password = req.body.acc_mk;

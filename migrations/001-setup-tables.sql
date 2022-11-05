@@ -50,7 +50,7 @@ CREATE TABLE PATIENT(
     p_BHXH TEXT,
     p_phnu TEXT, 
     p_email TEXT,
-    p_type TEXT NOT NULL CHECK(p_type IN ('Thường','Vip')), 
+    p_type TEXT CHECK(p_type IN ('Thường','Vip')), 
     acc_un INTEGER,
     FOREIGN KEY (acc_un) REFERENCES ACCOUNT(acc_un)
 );
