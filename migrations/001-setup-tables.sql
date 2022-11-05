@@ -30,8 +30,7 @@ CREATE TABLE DOCTOR(
 );
 CREATE TABLE ADMIN(
     a_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-    a_fname TEXT NOT NULL,
-    a_lname TEXT NOT NULL,
+    a_name TEXT NOT NULL,
     a_dateOB INTEGER, 
     a_sex TEXT CHECK(a_sex IN ('Nam','Nữ')), 
     a_phnu TEXT, 
@@ -44,8 +43,7 @@ CREATE TABLE ADMIN(
 );
 CREATE TABLE PATIENT(
     p_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-    p_fname TEXT NOT NULL,
-    p_lname TEXT NOT NULL,
+    p_name TEXT NOT NULL,
     p_dateOB INTEGER, 
     p_sex TEXT CHECK(p_sex IN ('Nam','Nữ')), 
     p_ethnic TEXT,
@@ -104,7 +102,7 @@ CREATE TABLE COMMENT(
     acc_un TEXT NOT NULL, 
     b_id INTEGER NOT NULL, 
     c_content TEXT, 
-    c_time INTERGER,
+    c_time INTEGER,
     FOREIGN KEY (acc_un) REFERENCES ACCOUNT(acc_un),
     FOREIGN KEY (b_id) REFERENCES BLOG(b_id)
 );
@@ -154,77 +152,89 @@ CREATE TABLE APPOINTMENT(
 
 /* 3. INSERT ROW */
 -- a. ACCOUNT 
-INSERT INTO ACCOUNT VALUES('xuan_truong','xuantruong123', '/assets/oggy.png', 'doctor');
-INSERT INTO ACCOUNT VALUES('quang_khai','quangkhai123', '/assets/joey.png', 'admin');
-INSERT INTO ACCOUNT VALUES('anh_tuyet','anhtuyet123', '/assets/jack.png', 'patient');
+INSERT INTO ACCOUNT(acc_un, acc_mk, acc_role) VALUES('xuan_truong','xuantruong123','doctor');
+INSERT INTO ACCOUNT(acc_un, acc_mk, acc_role) VALUES('quang_khai','quangkhai123'  ,'admin');
+INSERT INTO ACCOUNT(acc_un, acc_mk, acc_role) VALUES('anh_tuyet','anhtuyet123'    ,'patient');
 
--- b. DOCTOR
+-- -- b. DOCTOR
 INSERT INTO DOCTOR(d_name, d_dateOB, d_sex, d_phnu, d_email, d_position, d_salr, d_odate, d_edate, acc_un) VALUES('Nguyễn Xuân Trường', STRFTIME('%d/%m/%Y', '1983-07-25'), 'Nam', '0921954763', 'xuantruong@gmail.com', 'Nhân viên', 10500000, NULL, NULL, 'xuan_truong');
 
--- c. ADMIN
+-- -- c. ADMIN
 INSERT INTO ADMIN(a_name, a_dateOB, a_sex, a_phnu, a_email,a_salr, a_odate, a_edate, acc_un) VALUES('Trần Quang Khải', STRFTIME('%d/%m/%Y', '1972-11-13'), 'Nam', '0819655472', 'quangkhai@gmail.com', 8000000, NULL, NULL, 'quang_khai');
 
--- d. PATIENT
+-- -- d. PATIENT
 INSERT INTO PATIENT(p_name,p_dateOB, p_sex, p_ethnic,p_BHXH,p_phnu, p_email,p_type, acc_un) VALUES('Lê Anh Tuyết', STRFTIME('%d/%m/%Y', '1982-04-06'), 'Nữ', 'Kinh', NULL, '0927883174', 'anhtuyet@gmail.com', 'Thường', 'anh_tuyet');
 
--- e. BLOG
+-- -- e. BLOG
 INSERT INTO BLOG(b_date, b_topic, b_head,b_body) VALUES(STRFTIME('%d/%m/%Y', '2022-10-28'), 'Covid-19', 'Covid-19 lây qua những đường nào', NULL);
 
--- f. SERVICE
+-- -- f. SERVICE
 INSERT INTO SERVICE(s_name, s_type, s_desc, s_price, s_oday, s_eday, s_otime, s_etime) VALUES('Chăm sóc răng miệng', 'Khám', 'Làm sạch vi khuẩn khoang miệng, làm trắng răng, giúp răng mạnh khỏe', 3000000, 2, 6, STRFTIME('%H:%M', '8:00'), STRFTIME('%H:%M', '17:00'));
 
--- g. MEDICINE
+-- -- g. MEDICINE
 INSERT INTO MEDICINE(m_name, m_price, m_orig, m_func, m_amnt,m_unit) VALUES('Paracetamon', 50000, 'Đức', 'Giảm đau đầu, chóng mặt, buồn nôn', 30, 'hộp');
 
--- h. RECORD
---INSERT INTO RECORD VALUES();
+-- -- h. RECORD
+-- --INSERT INTO RECORD VALUES();
 
--- i. BLOG_AUTHOR
---INSERT INTO BLOG_AUTHOR VALUES();
+-- -- i. BLOG_AUTHOR
+-- --INSERT INTO BLOG_AUTHOR VALUES();
 
--- k. COMMENT
---INSERT INTO COMMENT VALUES();
+-- -- k. COMMENT
+-- --INSERT INTO COMMENT VALUES();
 
--- l. BUY_LIST
---INSERT INTO BUY_LIST VALUES();
+-- -- l. BUY_LIST
+-- --INSERT INTO BUY_LIST VALUES();
 
--- m. APPOINTMENT
-INSERT INTO APPOINTMENT VALUES(1,1,1,1,STRFTIME('%Y-%m-%d', '2000-01-13'),STRFTIME('%H:%M', '08:00'),STRFTIME('%H:%M', '10:00'), 'BienHoa','408','Khám răng sâu');
-SELECT * FROM APPOINTMENT;
-DELETE FROM APPOINTMENT;
-/* 4.QUERY ROWS */
--- a. Query ALL 
-    --
-    --  SELECT * FROM ...;
-    --
+-- -- m. APPOINTMENT
+INSERT INTO APPOINTMENT(
+    appoint_status,
+    p_id          , 
+    d_id          , 
+    s_id          , 
+    meet_day      ,
+    meet_otime    , 
+    meet_etime    , 
+    meet_place    , 
+    meet_room     , 
+    meet_desc  
+    ) 
+    VALUES('waiting',1,1,1,STRFTIME('%Y-%m-%d', '2000-01-13'),STRFTIME('%H:%M', '08:00'),STRFTIME('%H:%M', '10:00'), 'BienHoa','408','Khám răng sâu');
+-- SELECT * FROM APPOINTMENT;
+-- DELETE FROM APPOINTMENT;
+-- /* 4.QUERY ROWS */
+-- -- a. Query ALL 
+--     --
+--     --  SELECT * FROM ...;
+--     --
     
--- b. ACCOUNT 
--- c. DOCTOR
--- d. ADMIN
--- e. PATIENT
--- f. BLOG
--- g. SERVICE
--- h. MEDICINE
--- i. RECORD
-    -- a. Get records of patient
-        SELECT *
-        FROM RECORD
-        WHERE appoint_id = (
-            SELECT appoint_id 
-            FROM APPOINTMENT
-            WHERE p_id = 1
-        );
--- k. BLOG_AUTHOR
--- l. COMMENT
--- m. BUY_LIST
--- n. APPOINTMENT
-    -- a. Get day and time of appointment 
-        SELECT STRFTIME('%d', meet_day) AS MONTH FROM APPOINTMENT; --GET DAY
-        SELECT STRFTIME('%H', meet_otime) AS HOUR FROM APPOINTMENT; --GET HOUR
-    -- b. Get all appointment of patient
-        SELECT *
-        FROM APPOINTMENT
-        WHERE p_id = 1;
+-- -- b. ACCOUNT 
+-- -- c. DOCTOR
+-- -- d. ADMIN
+-- -- e. PATIENT
+-- -- f. BLOG
+-- -- g. SERVICE
+-- -- h. MEDICINE
+-- -- i. RECORD
+--     -- a. Get records of patient
+--         SELECT *
+--         FROM RECORD
+--         WHERE appoint_id = (
+--             SELECT appoint_id 
+--             FROM APPOINTMENT
+--             WHERE p_id = 1
+--         );
+-- -- k. BLOG_AUTHOR
+-- -- l. COMMENT
+-- -- m. BUY_LIST
+-- -- n. APPOINTMENT
+--     -- a. Get day and time of appointment 
+--         SELECT STRFTIME('%d', meet_day) AS MONTH FROM APPOINTMENT; --GET DAY
+--         SELECT STRFTIME('%H', meet_otime) AS HOUR FROM APPOINTMENT; --GET HOUR
+--     -- b. Get all appointment of patient
+--         SELECT *
+--         FROM APPOINTMENT
+--         WHERE p_id = 1;
 
         
 
