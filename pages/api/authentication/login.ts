@@ -8,7 +8,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     //check fields
 	const checkFieldsResult = CheckFields(req,['acc_un','acc_mk'] , res);
 	if (checkFieldsResult !== true) {
-		return res.status(400).json({message: checkFieldsResult});
+		return res.status(200).json({message: checkFieldsResult});
 	}
 
     const username = req.body.acc_un;
@@ -16,12 +16,12 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 
     const account = await Person.GetAccountByUsername(username);
     if(!account) {
-        res.json({message: 'We do not have this account'})
+        res.status(200).json({message: 'We do not have this account'})
     }else{
         if(account.acc_mk === password) {
-            res.json({message: 'Logged in successfully.', "role": account.acc_role});
+            res.status(200).json({message: 'Logged in successfully.', "role": account.acc_role});
         }else{
-            res.json({message: 'Incorrect password'})
+            res.status(200).json({message: 'Incorrect password'})
         }
     }
 }
