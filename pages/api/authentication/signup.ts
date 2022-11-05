@@ -1,7 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 // import api resquest response from next
 import {NextApiRequest, NextApiResponse} from 'next';
-import { CheckFields } from '../../../helpers/request/request-helper';
+import { CheckFields } from '../../../helpers/request-helper';
+import { respondWithJson } from '../../../helpers/response-helper';
 import PersonFactory from '../../../classes/person-factory.mjs';
 
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
@@ -9,14 +10,14 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 	// check if all fields are present in request body
 	const checkFieldsResult = CheckFields(req, fields, res);
 	if (checkFieldsResult !== true) {
-		return res.status(200).json({message: checkFieldsResult});
+		return respondWithJson(res, 0, checkFieldsResult);
 	}
 
 	const requestBody = req.body;
 
 	//check if requestBody.role in ('patient', 'doctor', 'admin')
 	if(requestBody.role !== 'patient' && requestBody.role !== 'doctor' && requestBody.role !== 'admin'){
-		return res.status(200).json({message: 'Role must be patient, doctor or admin'});
+		return respondWithJson(res, 0, 'Role must be patient, doctor or admin');
 	}
 
 	var newPerson = await PersonFactory.NewPersonInstanceWithRole(requestBody.name, requestBody.email, requestBody.phonenumber, true, requestBody.role);
@@ -24,9 +25,9 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 	const result = await newPerson.InsertToDatabase();
 
 	if (result === true ) {
-		return res.status(200).json({message: 'Account created successfully'});
+		return respondWithJson(res, 1, 'Account created successfully');
 	}
 	else{
-		return res.status(200).json({message: result});
+		return respondWithJson(res, 0, result );
 	}
 }
