@@ -9,14 +9,14 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 	// check if all fields are present in request body
 	const checkFieldsResult = CheckFields(req, fields, res);
 	if (checkFieldsResult !== true) {
-		return res.status(400).json({message: checkFieldsResult});
+		return res.status(200).json({message: checkFieldsResult});
 	}
 
 	const requestBody = req.body;
 
 	//check if requestBody.role in ('patient', 'doctor', 'admin')
 	if(requestBody.role !== 'patient' && requestBody.role !== 'doctor' && requestBody.role !== 'admin'){
-		return res.status(400).json({message: 'Role must be patient, doctor or admin'});
+		return res.status(200).json({message: 'Role must be patient, doctor or admin'});
 	}
 
 	var newPerson = await PersonFactory.NewPersonInstanceWithRole(requestBody.name, requestBody.email, requestBody.phonenumber, true, requestBody.role);
@@ -27,6 +27,6 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 		return res.status(200).json({message: 'Account created successfully'});
 	}
 	else{
-		return res.status(400).json({message: result});
+		return res.status(200).json({message: result});
 	}
 }
