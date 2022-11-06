@@ -11,7 +11,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 	// check fields
 	const fields = [ 'patient_id', 'day','time','description' ] ;
 
-	const result = CheckFields(req, fields, res);
+	const result = CheckFields(req, fields);
 	if (result !== true) {
 		return respondWithJson(res, 0, result);
 	}
