@@ -119,7 +119,7 @@ CREATE TABLE BUY_LIST(
 CREATE TABLE APPOINTMENT(
     appoint_id INTEGER PRIMARY KEY AUTOINCREMENT,
     appoint_status TEXT CHECK(appoint_status IN ('waiting','approved','canceled')),
-    p_id INTEGER, 
+    p_id INTEGER NOT NULL, 
     d_id INTEGER, 
     s_id INTEGER, 
     meet_day INTEGER,
@@ -200,6 +200,19 @@ INSERT INTO APPOINTMENT(
     meet_desc  
     ) 
     VALUES('waiting',1,1,1,STRFTIME('%Y-%m-%d', '2000-01-13'),STRFTIME('%H:%M', '08:00'),STRFTIME('%H:%M', '10:00'), 'BienHoa','408','Khám răng sâu');
+INSERT INTO APPOINTMENT(
+    appoint_status,
+    p_id          , 
+    d_id          , 
+    s_id          , 
+    meet_day      ,
+    meet_otime    , 
+    meet_etime    , 
+    meet_place    , 
+    meet_room     , 
+    meet_desc  
+    ) 
+    VALUES('waiting',1,1,1,STRFTIME('%Y-%m-%d', '2000-01-13'),STRFTIME('%H:%M', '08:00'),STRFTIME('%H:%M', '10:00'), 'BienHoa','408','Khám sâu');
 -- SELECT * FROM APPOINTMENT;
 -- DELETE FROM APPOINTMENT;
 -- /* 4.QUERY ROWS */

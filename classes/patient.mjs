@@ -1,5 +1,6 @@
 import Person from "./person.mjs";
 import { GetDatabase } from "../helpers/database/database-helper.mjs";
+import Appointment from "./appointment.mjs";
 
 //a clas that inherate from Person
 export default class Patient extends Person{
@@ -28,17 +29,46 @@ export default class Patient extends Person{
 
 	async GetAppointments(){
 		if ( this.id){
-			const db = await GetDatabase();
-			const appointments = await db.all('SELECT * FROM APPOINTMENT WHERE p_id = ?', [this.id]);
-			return appointments;
+			const result = await Appointment.GetAllAppointmentsByPatientId(this.id);
+			return result;
 		}
 		return "No id of patient instance"; 
+	}
+
+	async MakeAppointment(day, time, description){
+		const appointment = new Appointment( 
+			null,
+			'waiting',
+			this.id,
+			null,
+			null,
+			day,
+			time,
+			null,
+			null,
+			null,
+			description
+		);
+		const result = await appointment.InsertToDatabase();
+		return result;
 	}
 
 	static async GetPatientById(id){
 		var patient = new Patient();
 		const result = await patient.GetPrpertiesByIdAndRole(id, 'patient');
-		if ( result !== true ) console.log(result);
+
+		if ( result !== true ) console.log(result); // if patient not found
+
+		// check if patient has account
+		if ( patient.acc_un){
+			patient.hasAccount = true;
+
+			//get the account of patient
+			const acc = await Person.GetAccountByUsername(patient.acc_un);
+			patient.acc_mk = acc.acc_mk;
+			patient.acc_role = acc.acc_role;
+		}
+
 		return patient;
 	}
 }
