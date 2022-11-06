@@ -9,7 +9,7 @@ import Patient from '../../../classes/patient.mjs';
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 	try{
 		const fields = ['patient_id'] ;
-		const result = CheckFields(req, fields, res);
+		const result = CheckFields(req, fields);
 		if (result === true) {
 			var patient = await Patient.GetPatientById(req.body.patient_id);
 			const result = await patient.GetAppointments();
