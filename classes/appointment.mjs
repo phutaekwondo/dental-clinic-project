@@ -14,6 +14,13 @@ export default class Appointment{
 	desc;
 
 	constructor(id, status, p_id, d_id, s_id, day, otime, etime, place, room, desc){
+
+		//check date format
+		if ( day && !Appointment.IsDateFormattedCorrect(day) ) throw 'Date is not formatted correctly';
+		//checl time format
+		if ( otime && !Appointment.IsTimeFormattedCorrect(otime) ) throw 'Start time is not formatted correctly';
+		if ( etime && !Appointment.IsTimeFormattedCorrect(etime) ) throw 'End time is not formatted correctly';
+
 		this.id = id;
 		this.status = status;
 		this.p_id = p_id;
@@ -26,6 +33,23 @@ export default class Appointment{
 		this.room = room;
 		this.desc = desc;
 	}
+
+	async InsertToDatabase(){
+		const db = await GetDatabase();
+
+		try {
+			const result = await db.run(
+				'INSERT INTO appointment (appoint_status, p_id, d_id, s_id, meet_day, meet_otime, meet_etime, meet_place, meet_room, meet_desc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+				this.status, this.p_id, this.d_id, this.s_id, this.day, this.otime, this.etime, this.place, this.room, this.desc);
+
+			this.id = result.lastID;
+		}
+		catch{
+			return "Inserting appointment to database failed";
+		}
+		return true;
+	}
+
 
 	static QueryResultToAppointments(result ){
 		var appointments = [];
@@ -67,4 +91,30 @@ export default class Appointment{
 		// convert result to an array of Appointment instances
 		return Appointment.QueryResultToAppointments(result); 
 	};
+
+	static IsDateFormattedCorrect(date){
+
+		const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+
+		if ( !dateRegex.test(date) ) return false;
+
+		const time = new Date(date);
+
+		//check if date is valid
+		if ( !time.getTime() ) return false;
+
+		return true;
+	}
+
+	static IsTimeFormattedCorrect(time){
+		const timeRegex = /^\d{2}:\d{2}$/;
+
+		if ( !timeRegex.test(time) ) return false;
+
+		//check if time is valid
+		const timeParts = time.split(':');
+		if ( timeParts[0] > 23 || timeParts[1] > 59 ) return false;
+
+		return true;
+	}
 };
