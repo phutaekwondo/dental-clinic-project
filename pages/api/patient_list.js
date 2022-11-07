@@ -7,13 +7,14 @@ export default function handler(req, res) {
     }
     // Kiểm tra method của req
     // Chỉ chấp nhận method GET
-    if (res.method !== "GET") {
-        res.status(405).json({message: "FAIL"});
+    if (req.method !== "GET") {
+        res.status(200).json({message: "FAIL"});
+        throw new Error("Invalid request method!")
     }
     // Kết nối sqlite3
     const db = new sqlite3.Database("./database.sqlite", sqlite3.Database, (err) => {
         if (err) {
-            res.status(404).json({message: "FAIL"});
+            res.status(200).json({message: "FAIL"});
             throw err;
         }
     });
@@ -23,7 +24,7 @@ export default function handler(req, res) {
     let queryResult = [];
     db.all(sql, (err, rows) => {
         if (err) {
-            res.status(404).json({message: "FAIL"});
+            res.status(200).json({message: "FAIL"});
             throw err;
         }
         // Mỗi element trong array queryResult sẽ chứa 1 JSON về 1 bệnh nhân
