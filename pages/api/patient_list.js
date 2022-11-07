@@ -1,10 +1,6 @@
 import sqlite3 from "sqlite3";
 
 export default function handler(req, res) {
-    // Kiểm tra type của req và res
-    if ((typeof req) !== "http.IncomingMessage" || (typeof res) !== "http.ServerResponse") {
-        throw new Error("Invalid req or res arguments!");
-    }
     // Kiểm tra method của req
     // Chỉ chấp nhận method GET
     if (req.method !== "GET") {
