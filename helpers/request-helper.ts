@@ -10,7 +10,7 @@ export function CheckFields (req: NextApiRequest, fields: string[] ) {
     return true;
 }
 
-export function IsDatesFomarted( req: NextApiRequest, fields: string[] ) {
+export function IsDatesFomartted( req: NextApiRequest, fields: string[] ) {
 	//check all fields in request body are date formatted
 	for (const field of fields) {
 		if (!IsDateFormattedCorrect(req.body[field]) && req.body[field]) {
@@ -20,7 +20,7 @@ export function IsDatesFomarted( req: NextApiRequest, fields: string[] ) {
 	return true;
 }
 
-export function IsTimesFomarted( req: NextApiRequest, fields: string[] ) {
+export function IsTimesFomartted( req: NextApiRequest, fields: string[] ) {
 	//check all fields in request body are time formatted
 	for (const field of fields) {
 		if (!IsTimeFormattedCorrect(req.body[field]) && req.body[field]) {
@@ -30,9 +30,9 @@ export function IsTimesFomarted( req: NextApiRequest, fields: string[] ) {
 	return true;
 }
 
-export function IsDateAndTimeFormated( req: NextApiRequest, dateFields: string[], timeFields: string[] ) {
+export function IsDateAndTimeFormatted( req: NextApiRequest, dateFields: string[], timeFields: string[] ) {
 	//check all fields in request body are date and time formatted
-	if (IsDatesFomarted(req, dateFields) && IsTimesFomarted(req, timeFields)) {
+	if (IsDatesFomartted(req, dateFields) && IsTimesFomartted(req, timeFields)) {
 		return true;
 	}
 	return false;
