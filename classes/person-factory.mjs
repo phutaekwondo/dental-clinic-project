@@ -6,14 +6,8 @@ import Admin from "./admin.mjs";
 // to help on many circumstances
 
 export default class PersonFactory {
-    acceptRolse = ['admin', 'doctor', 'patient'];
 
     static async NewPersonInstanceWithRole(name, email, phonenumber, hasAccount, role) {
-
-        // check if role not in acceptRoles
-        if (!this.acceptRolse.includes(role)) {
-            throw new Error("role not in acceptRoles");
-        }
            
         var newPerson;
         switch (role) {
