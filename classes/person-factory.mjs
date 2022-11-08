@@ -6,9 +6,8 @@ import Admin from "./admin.mjs";
 // to help on many circumstances
 
 export default class PersonFactory {
-
     static async NewPersonInstanceWithRole(name, email, phonenumber, hasAccount, role) {
-           
+
         var newPerson;
         switch (role) {
             case "patient":
