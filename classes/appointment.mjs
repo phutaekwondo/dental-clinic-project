@@ -45,9 +45,40 @@ export default class Appointment{
 			this.id = result.lastID;
 		}
 		catch{
-			return "Inserting appointment to database failed";
+			throw "Inserting appointment to database failed";
 		}
 		return true;
+	}
+
+	async UpdateInDatabase(){
+		const db = await GetDatabase();
+
+		const query = `UPDATE appointment SET 
+			appoint_status = \'${this.status}\', 
+			p_id =           ${this.p_id}, 
+			d_id =           ${this.d_id}, 
+			s_id =           ${this.s_id}, 
+			meet_day =       \'${this.day}\', 
+			meet_otime =     \'${this.otime}\', 
+			meet_etime =     \'${this.etime}\', 
+			meet_place =     \'${this.place}\', 
+			meet_room =      \'${this.room}\', 
+			meet_desc =      \'${this.desc}\' 
+			WHERE appoint_id = ${this.id}`;
+
+		await db.run(query);
+		return true;
+	}
+
+	async SyncToDatabase(){
+		const db = await GetDatabase();
+
+		if ( !this.id ) {
+				this.InsertToDatabase();
+		}
+		else {
+			this.UpdateInDatabase();
+		}
 	}
 
 
@@ -73,7 +104,28 @@ export default class Appointment{
 		return appointments;
 	}
 
-	static async GetAppointmentById(id){/*NEED IMPLEMENT*/};
+	static async GetAppointmentById(id){
+		const appointment = new Appointment();
+		const db = await GetDatabase();
+
+		const queryResult = await db.get('SELECT * FROM appointment WHERE appoint_id = ?', id);
+
+		if ( !queryResult ) throw 'Appointment not found';
+
+		appointment.id = queryResult.appoint_id;
+		appointment.status = queryResult.appoint_status;
+		appointment.p_id = queryResult.p_id;
+		appointment.d_id = queryResult.d_id;
+		appointment.s_id = queryResult.s_id;
+		appointment.day = queryResult.meet_day;
+		appointment.otime = queryResult.meet_otime;
+		appointment.etime = queryResult.meet_etime;
+		appointment.place = queryResult.meet_place;
+		appointment.room = queryResult.meet_room;
+		appointment.desc = queryResult.meet_desc;
+
+		return appointment;
+	};
 
 	static async GetAllAppointments(){
 		const db = await GetDatabase();
