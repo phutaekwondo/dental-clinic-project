@@ -3,7 +3,7 @@ import { GetDatabase } from "../helpers/database/database-helper.mjs";
 // a class person has all properties in patient table 
 export default class Person{
 	id           ;
-	name        ;
+	name         ;
 	email        ;
 	phonenumber  ;
 	hasAccount   ;
