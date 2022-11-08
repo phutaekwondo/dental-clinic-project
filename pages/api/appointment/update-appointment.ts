@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 // import api resquest response from next
 import {NextApiRequest, NextApiResponse} from 'next';
-import { CheckFields } from '../../../helpers/request-helper';
+import { CheckFields, IsDateAndTimeFormated} from '../../../helpers/request-helper';
 import { respondWithJson } from '../../../helpers/response-helper';
 import Appointment from '../../../classes/appointment.mjs';
 
@@ -22,9 +22,13 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 		"desc"
 	];
 
+	//check date time format
+	if (IsDateAndTimeFormated(req, ['day'], ['otime', 'etime']) !== true) {
+		return respondWithJson(res, 0, "Date and time format is not correct");
+	}
+
 	//get fields in request body
 	const fieldsInRequestBody = GetFieldsInRequestBody(req);
-	// console.log(fieldsInRequestBody);
 
 	// 	NEED TO CHECK IF P_ID EXISTS IN DB
 
