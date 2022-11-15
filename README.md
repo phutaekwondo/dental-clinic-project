@@ -18,7 +18,7 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000). There will be a page that show how many APIs we have
 
-## Run Project
+## Deploy
 
 Our deployed site: https://dental-clinic-project.herokuapp.com/
 
