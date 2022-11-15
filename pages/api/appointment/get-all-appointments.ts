@@ -13,6 +13,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 		if (result === true) {
 			var patient = await Patient.GetPatientById(req.body.patient_id);
 			const result = await patient.GetAppointments();
+			console.log(result);
 			return respondWithJson(res, 1, result);
 		}
 		else{
@@ -20,7 +21,8 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 			return respondWithJson(res, 1, {result, message:'add patient_id to request body to get only patient appointments'});
 		}
 	}
-	catch{
+	catch (err){
+		console.log(err);
 		return respondWithJson(res, 0, 'Error getting appointments');
 	}
 }
