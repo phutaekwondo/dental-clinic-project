@@ -136,7 +136,6 @@ CREATE TABLE RECORD(
 
 CREATE TABLE RECORD_DETAIL(
     recDet_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    recDet_workplace TEXT,
     recDet_indiagnose TEXT,  --chẩn đoán lúc vào viện
     recDet_outdiagnose TEXT,  --chẩn đoán lúc ra viện
     recDet_description TEXT,
@@ -232,7 +231,6 @@ INSERT INTO MEDICINE(m_name, m_price, m_orig, m_func, m_amnt,m_unit) VALUES('Tif
 
 --SELECT * FROM MEDICINE;
 
-
 --SELECT * FROM RECORD;
 
 -- h. BLOG_AUTHOR
@@ -261,11 +259,11 @@ INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, appoint_id) 
 INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2002-02-23 09:05'), STRFTIME('%Y-%m-%d %H:%M','2002-02-23 09:05'), 'Sâu răng', 'Bệnh nhân 12 tuổi có 1 răng sâu ở miệng bên trái', 5);
 
 --n. RECORD_DETAIL
-INSERT INTO RECORD_DETAIL(recDet_workplace, recDet_indiagnose, recDet_outdiagnose, recDet_description,recDet_conclusion ,recDet_examineday , recDet_reexamineday , rec_id) VALUES(NULL, 'Sâu 2 răng hàm','Đã nhổ răng sâu',NULL,'Khỏi bệnh',STRFTIME('%Y-%m-%d','2020-01-13'),NULL,1);
-INSERT INTO RECORD_DETAIL(recDet_workplace, recDet_indiagnose, recDet_outdiagnose, recDet_description,recDet_conclusion ,recDet_examineday , recDet_reexamineday , rec_id) VALUES(NULL, 'Viêm lợi do nóng trong người','Đã cấp thuốc',NULL,'Khỏi bệnh',STRFTIME('%Y-%m-%d','2020-12-22'),NULL,2);
-INSERT INTO RECORD_DETAIL(recDet_workplace, recDet_indiagnose, recDet_outdiagnose, recDet_description,recDet_conclusion ,recDet_examineday , recDet_reexamineday , rec_id) VALUES(NULL, 'Răng cửa bị lung lay','Đã nhổ răng sâu',NULL,'Khỏi bệnh',STRFTIME('%Y-%m-%d','2010-01-04'),NULL,3);
-INSERT INTO RECORD_DETAIL(recDet_workplace, recDet_indiagnose, recDet_outdiagnose, recDet_description,recDet_conclusion ,recDet_examineday , recDet_reexamineday , rec_id) VALUES(NULL, 'Trồng răng giả','Đã trồng 1 răng giả',NULL,'Khỏi bệnh',STRFTIME('%Y-%m-%d','2018-11-13'),NULL,4);
-INSERT INTO RECORD_DETAIL(recDet_workplace, recDet_indiagnose, recDet_outdiagnose, recDet_description,recDet_conclusion ,recDet_examineday , recDet_reexamineday , rec_id) VALUES(NULL, 'Sâu 2 răng hàm','Đã nhổ răng sâu',NULL,'Khỏi bệnh',STRFTIME('%Y-%m-%d','2020-01-13'),NULL,5);
+INSERT INTO RECORD_DETAIL(recDet_indiagnose, recDet_outdiagnose, recDet_description,recDet_conclusion ,recDet_examineday , recDet_reexamineday , rec_id) VALUES('Sâu 2 răng hàm','Đã nhổ răng sâu',NULL,'Khỏi bệnh',STRFTIME('%Y-%m-%d','2020-01-13'),NULL,1);
+INSERT INTO RECORD_DETAIL(recDet_indiagnose, recDet_outdiagnose, recDet_description,recDet_conclusion ,recDet_examineday , recDet_reexamineday , rec_id) VALUES('Viêm lợi do nóng trong người','Đã cấp thuốc',NULL,'Khỏi bệnh',STRFTIME('%Y-%m-%d','2020-12-22'),NULL,2);
+INSERT INTO RECORD_DETAIL(recDet_indiagnose, recDet_outdiagnose, recDet_description,recDet_conclusion ,recDet_examineday , recDet_reexamineday , rec_id) VALUES('Răng cửa bị lung lay','Đã nhổ răng sâu',NULL,'Khỏi bệnh',STRFTIME('%Y-%m-%d','2010-01-04'),NULL,3);
+INSERT INTO RECORD_DETAIL(recDet_indiagnose, recDet_outdiagnose, recDet_description,recDet_conclusion ,recDet_examineday , recDet_reexamineday , rec_id) VALUES('Trồng răng giả','Đã trồng 1 răng giả',NULL,'Khỏi bệnh',STRFTIME('%Y-%m-%d','2018-11-13'),NULL,4);
+INSERT INTO RECORD_DETAIL(recDet_indiagnose, recDet_outdiagnose, recDet_description,recDet_conclusion ,recDet_examineday , recDet_reexamineday , rec_id) VALUES('Sâu 2 răng hàm','Đã nhổ răng sâu',NULL,'Khỏi bệnh',STRFTIME('%Y-%m-%d','2020-01-13'),NULL,5);
 
 /* 4.QUERY ROWS */
 -- a. Query ALL 
