@@ -53,18 +53,21 @@ export default class Appointment{
 	async UpdateInDatabase(){
 		const db = await GetDatabase();
 
-		const query = `UPDATE appointment SET 
-			appoint_status = \'${this.status}\', 
-			p_id =           ${this.p_id}, 
-			d_id =           ${this.d_id}, 
-			s_id =           ${this.s_id}, 
-			meet_day =       \'${this.day}\', 
-			meet_otime =     \'${this.otime}\', 
-			meet_etime =     \'${this.etime}\', 
-			meet_place =     \'${this.place}\', 
-			meet_room =      \'${this.room}\', 
-			meet_desc =      \'${this.desc}\' 
-			WHERE appoint_id = ${this.id}`;
+		//write a query that update appointment properties which are not null
+		var query = `UPDATE appointment SET `;
+		var setlist = [];
+		if ( this.status ) setlist.push( `appoint_status = \'${this.status}\'`);
+		if ( this.p_id ) setlist.push( `p_id = ${this.p_id}`);
+		if ( this.d_id ) setlist.push( `d_id = ${this.d_id}`);
+		if ( this.s_id ) setlist.push( `s_id = ${this.s_id}`);
+		if ( this.day ) setlist.push( `meet_day = \'${this.day}\'`);
+		if ( this.otime ) setlist.push( `meet_otime = \'${this.otime}\'`);
+		if ( this.etime ) setlist.push( `meet_etime = \'${this.etime}\'`);
+		if ( this.place ) setlist.push( `meet_place = \'${this.place}\'`);
+		if ( this.room ) setlist.push( `meet_room = \'${this.room}\'`);
+		if ( this.desc ) setlist.push( `meet_desc = \'${this.desc}\'`);
+		query += setlist.join(', ');
+		query += ` WHERE appoint_id = ${this.id}`;
 
 		await db.run(query);
 		return true;
