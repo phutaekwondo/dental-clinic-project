@@ -5,13 +5,9 @@ export default class Doctor extends Person{
 	hasAccount;
 
 //constructor
-	constructor(name,  email, phonenumber){
-		super(name,  email, phonenumber);
+	constructor(fname, lname, email, phonenumber){
+		super(fname, lname, email, phonenumber);
 		this.hasAccount = true;
-	}
-
-	RegisterAccount(username, password){
-		super.RegisterAccount(username, password, 'doctor');
 	}
 
 	async InsertToDatabase(){
