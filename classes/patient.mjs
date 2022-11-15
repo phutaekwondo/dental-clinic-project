@@ -55,7 +55,26 @@ export default class Patient extends Person{
 
 	static async GetPatientById(id){
 		var patient = new Patient();
-		const result = await patient.GetPrpertiesByIdAndRole(id, 'patient');
+		const result = await patient.GetPropertiesByIdAndRole(id, 'patient');
+
+		if ( result !== true ) console.log(result); // if patient not found
+
+		// check if patient has account
+		if ( patient.acc_un){
+			patient.hasAccount = true;
+
+			//get the account of patient
+			const acc = await Person.GetAccountByUsername(patient.acc_un);
+			patient.acc_mk = acc.acc_mk;
+			patient.acc_role = acc.acc_role;
+		}
+
+		return patient;
+	}
+
+	static async GetPatientByUsername(username){
+		var patient = new Patient();
+		const result = await patient.GetPropertiesByUsernameAndRole(username, 'patient');
 
 		if ( result !== true ) console.log(result); // if patient not found
 
