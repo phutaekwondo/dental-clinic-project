@@ -85,6 +85,7 @@ CREATE TABLE MEDICINE(
 CREATE TABLE RECORD(
     rec_id INTEGER PRIMARY KEY AUTOINCREMENT, 
     rec_date INTEGER,
+    rec_lastmodified INTEGER,
     rec_dease TEXT, 
     rec_desc TEXT, 
     appoint_id INTEGER NOT NULL,
@@ -218,25 +219,19 @@ INSERT INTO MEDICINE(m_name, m_price, m_orig, m_func, m_amnt,m_unit) VALUES('Tif
 
 --SELECT * FROM MEDICINE;
 
--- h. RECORD
-INSERT INTO RECORD(rec_date, rec_dease, rec_desc, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2020-01-13 17:30'), 'Sâu răng', 'Bệnh nhân 8 tuổi có 1 răng sâu ở miệng bên phải', 1);
-INSERT INTO RECORD(rec_date, rec_dease, rec_desc, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2020-12-22 08:30'), 'Viêm lợi', 'Bệnh nhân 20 tuổi nổi mụn nhọt ở lợi', 2);
-INSERT INTO RECORD(rec_date, rec_dease, rec_desc, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2010-01-04 10:00'), 'Răng lung lay', NULL, 3);
-INSERT INTO RECORD(rec_date, rec_dease, rec_desc, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2018-11-13 13:15'), 'Thay răng', 'Bệnh nhân 50 tuổi trồng răng giả', 4);
-INSERT INTO RECORD(rec_date, rec_dease, rec_desc, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2002-02-23 09:05'), 'Sâu răng', 'Bệnh nhân 12 tuổi có 1 răng sâu ở miệng bên trái', 5);
 
 --SELECT * FROM RECORD;
 
--- i. BLOG_AUTHOR
+-- h. BLOG_AUTHOR
 --INSERT INTO BLOG_AUTHOR VALUES();
 
--- k. COMMENT
+-- i. COMMENT
 --INSERT INTO COMMENT VALUES();
 
--- l. BUY_LIST
+-- k. BUY_LIST
 --INSERT INTO BUY_LIST VALUES();
 
--- m. APPOINTMENT
+-- l. APPOINTMENT
 INSERT INTO APPOINTMENT VALUES(1,1,1,1,STRFTIME('%Y-%m-%d', '2020-01-13'),STRFTIME('%H:%M', '17:00'),STRFTIME('%H:%M', '18:00'), 'BienHoa','408','Khám răng sâu');
 INSERT INTO APPOINTMENT VALUES(2,2,1,1,STRFTIME('%Y-%m-%d', '2012-12-22'),STRFTIME('%H:%M', '08:00'),STRFTIME('%H:%M', '10:00'), 'BienHoa','501','Khám lợi');
 INSERT INTO APPOINTMENT VALUES(3,5,2,1,STRFTIME('%Y-%m-%d', '2010-01-04'),STRFTIME('%H:%M', '09:30'),STRFTIME('%H:%M', '11:00'), 'BienHoa','123','Nhổ răng');
@@ -244,6 +239,13 @@ INSERT INTO APPOINTMENT VALUES(4,1,3,1,STRFTIME('%Y-%m-%d', '2008-11-13'),STRFTI
 INSERT INTO APPOINTMENT VALUES(5,5,4,1,STRFTIME('%Y-%m-%d', '2002-02-24'),STRFTIME('%H:%M', '08:30'),STRFTIME('%H:%M', '10:00'), 'BienHoa','111','Nhổ răng');
 
 --SELECT * FROM APPOINTMENT;
+
+-- m. RECORD
+INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2020-01-13 17:30'), STRFTIME('%Y-%m-%d %H:%M','2020-01-13 17:30'), 'Sâu răng', 'Bệnh nhân 8 tuổi có 1 răng sâu ở miệng bên phải', 1);
+INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2020-12-22 08:30'), STRFTIME('%Y-%m-%d %H:%M','2020-12-22 08:30'), 'Viêm lợi', 'Bệnh nhân 20 tuổi nổi mụn nhọt ở lợi', 2);
+INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2010-01-04 10:00'), STRFTIME('%Y-%m-%d %H:%M','2010-01-04 10:00'), 'Răng lung lay', NULL, 3);
+INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2018-11-13 13:15'), STRFTIME('%Y-%m-%d %H:%M','2018-11-13 13:15'), 'Thay răng', 'Bệnh nhân 50 tuổi trồng răng giả', 4);
+INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2002-02-23 09:05'), STRFTIME('%Y-%m-%d %H:%M','2002-02-23 09:05'), 'Sâu răng', 'Bệnh nhân 12 tuổi có 1 răng sâu ở miệng bên trái', 5);
 
 /* 4.QUERY ROWS */
 -- a. Query ALL 
@@ -260,13 +262,10 @@ INSERT INTO APPOINTMENT VALUES(5,5,4,1,STRFTIME('%Y-%m-%d', '2002-02-24'),STRFTI
 -- h. MEDICINE
 -- i. RECORD
     -- a. Get records of patient
-        SELECT *
-        FROM RECORD
-        WHERE appoint_id = (
-            SELECT appoint_id 
-            FROM APPOINTMENT
-            WHERE p_id = 1
-        );
+        SELECT rec_id, rec_dease, d_id, rec_date, rec_lastmodified
+        FROM RECORD rec INNER JOIN APPOINTMENT app ON rec.appoint_id = app.appoint_id
+        WHERE app.p_id = 1;
+        
 -- k. BLOG_AUTHOR
 -- l. COMMENT
 -- m. BUY_LIST
