@@ -281,7 +281,7 @@ INSERT INTO RECORD_DETAIL(recDet_workplace, recDet_indiagnose, recDet_outdiagnos
 -- g. SERVICE
 -- h. MEDICINE
 -- i. RECORD
-    -- a. Get records of patient
+    -- 1. Get records of patient
         SELECT rec_id, rec_dease, d_id, rec_date, rec_lastmodified
         FROM RECORD rec INNER JOIN APPOINTMENT app ON rec.appoint_id = app.appoint_id
         WHERE app.p_id = 1;
@@ -290,15 +290,19 @@ INSERT INTO RECORD_DETAIL(recDet_workplace, recDet_indiagnose, recDet_outdiagnos
 -- l. COMMENT
 -- m. BUY_LIST
 -- n. APPOINTMENT
-    -- a. Get day and time of appointment 
+    -- 1. Get day and time of appointment 
         SELECT STRFTIME('%d', meet_day) AS MONTH FROM APPOINTMENT; --GET DAY
         SELECT STRFTIME('%H', meet_otime) AS HOUR FROM APPOINTMENT; --GET HOUR
-    -- b. Get all appointment of patient
+    -- 2. Get all appointment of patient
         SELECT *
         FROM APPOINTMENT
         WHERE p_id = 1;
 
-     
+-- s. RECORD_DETAIL
+    -- 1. Get record detail of a record
+        SELECT p_name,rec_dease, p_dateOB, p_sex, p_ethnic, p_BHXH, p_type, recDet_indiagnose, recDet_outdiagnose, recDet_description, recDet_conclusion, recDet_examineday, recDet_reexamineday
+        FROM PATIENT p INNER JOIN APPOINTMENT app ON p.p_id = app.p_id INNER JOIN RECORD rec ON app.appoint_id = rec.appoint_id INNER JOIN RECORD_DETAIL recDet ON rec.rec_id = recDet.rec_id
+        WHERE rec.rec_id = 1; 
 
 
 
