@@ -85,8 +85,58 @@ export default class Person{
 		return true;
 	};
 
+<<<<<<< HEAD
 
 //a static method
+=======
+	async GetPropertiesByIdAndRole(id, role){
+		const db = await GetDatabase();
+		const table = role;
+		const prefix = role.substring(0, 1) + '_';
+
+		const person = await db.get(`select * from ${table} where ${prefix}id="${id}"`);
+		if ( person ){
+			this.id = person[`${prefix}id`];
+			this.name = person[`${prefix}name`];
+			this.email = person[`${prefix}email`];
+			this.phonenumber = person[`${prefix}phnu`];
+			this.acc_un = person[`acc_un`];
+			return true;
+		}
+		else{
+			return "person not found";
+		}
+	}
+	async GetPropertiesByUsernameAndRole(username, role){
+		const db = await GetDatabase();
+		const table = role;
+		const prefix = role.substring(0, 1) + '_';
+
+		const person = await db.get(`select * from ${table} where acc_un="${username}"`);
+		if ( person ){
+			this.id = person[`${prefix}id`];
+			this.name = person[`${prefix}name`];
+			this.email = person[`${prefix}email`];
+			this.phonenumber = person[`${prefix}phnu`];
+			this.acc_un = person[`acc_un`];
+		}
+		else{
+			return "person not found";
+		}
+
+		const account = await db.get(`select * from account where acc_un="${username}"`);
+		if ( account ){
+			this.acc_mk = account[`acc_mk`];
+			this.acc_role = account[`acc_role`];
+			return true;
+		}
+		else{
+			return "account not found while get properties by username and role";
+		}
+	}
+
+	//a static method
+>>>>>>> 3560a6aeca0e51faa4e7aa82fbe6b2965cbb8304
 	static async GetAllAccounts(){
 		// return all rows in account, patient, doctor, admin table
 		const db = await GetDatabase();
