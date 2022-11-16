@@ -224,7 +224,7 @@ INSERT INTO SERVICE(s_name, s_type, s_desc, s_price, s_oday, s_eday, s_otime, s_
 
 -- g. MEDICINE
 INSERT INTO MEDICINE(m_name, m_price, m_orig, m_func, m_amnt,m_unit) VALUES('Paracetamon', 50000, 'Đức', 'Giảm đau đầu, chóng mặt, buồn nôn', 30, 'hộp');
-INSERT INTO MEDICINE(m_name, m_price, m_orig, m_func, m_amnt,m_unit) VALUES('Sensa cool', 30000, 'Chữ viêm lợi, mát gan', 23, 'hộp');
+INSERT INTO MEDICINE(m_name, m_price, m_orig, m_func, m_amnt,m_unit) VALUES('Sensa cool', 30000, 'Anh','Chữ viêm lợi, mát gan', 23, 'hộp');
 INSERT INTO MEDICINE(m_name, m_price, m_orig, m_func, m_amnt,m_unit) VALUES('Yuraf', 30000, 'Nhật', 'Giảm sốt', 10, 'hộp');
 INSERT INTO MEDICINE(m_name, m_price, m_orig, m_func, m_amnt,m_unit) VALUES('Tramadon', 20000, 'Ý', 'Giảm đau', 53, 'hộp');
 INSERT INTO MEDICINE(m_name, m_price, m_orig, m_func, m_amnt,m_unit) VALUES('Tiffy', 40000,'Canada', 'Hạ sốt', 8, 'hộp');
