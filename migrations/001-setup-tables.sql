@@ -57,7 +57,7 @@ CREATE TABLE PATIENT(
 
 CREATE TABLE BLOG(
     b_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-    b_date INTEGER, 
+    b_date INTEGER,  --ngày đăng
     b_topic TEXT, 
     b_head TEXT,
     b_body TEXT
@@ -90,6 +90,15 @@ CREATE TABLE BLOG_AUTHOR(
     FOREIGN KEY (b_id) REFERENCES BLOG(b_id),
     PRIMARY KEY (d_id, b_id)
 );
+
+CREATE TABLE BLOG_UPDATE(
+    b_id INTEGER,
+    b_lastmodified INTEGER,  --ngày cập nhật
+    b_description TEXT,  --thông tin thay đổi
+    PRIMARY KEY (b_id, b_lastmodified, b_description),
+    FOREIGN KEY(b_id) REFERENCES BLOG(b_id)
+);
+
 CREATE TABLE COMMENT(
     acc_un TEXT NOT NULL, 
     b_id INTEGER NOT NULL, 
@@ -212,6 +221,15 @@ INSERT INTO BLOG(b_date, b_topic, b_head,b_body) VALUES(STRFTIME('%d/%m/%Y', '20
 
 --SELECT * FROM BLOG;
 
+--v. BLOG_UPDATE
+INSERT INTO BLOG_UPDATE(b_id, b_lastmodified, b_description) VALUES(1, STRFTIME('%d/%m/%Y', '2022-10-28'), NULL);
+INSERT INTO BLOG_UPDATE(b_id, b_lastmodified, b_description) VALUES(2, STRFTIME('%d/%m/%Y', '2020-01-23'), NULL);
+INSERT INTO BLOG_UPDATE(b_id, b_lastmodified, b_description) VALUES(3, STRFTIME('%d/%m/%Y', '2012-02-11'), 'Thêm cách chữa trị đau miệng');
+INSERT INTO BLOG_UPDATE(b_id, b_lastmodified, b_description) VALUES(4, STRFTIME('%d/%m/%Y', '2010-04-04'), 'Thêm video quy trình trồng răng');
+INSERT INTO BLOG_UPDATE(b_id, b_lastmodified, b_description) VALUES(5, STRFTIME('%d/%m/%Y', '2008-12-31'), NULL);
+
+--SELECT * FROM BLOG_UPDATE;
+
 -- f. SERVICE
 INSERT INTO SERVICE(s_name, s_type, s_desc, s_price, s_oday, s_eday, s_otime, s_etime) VALUES('Chăm sóc răng miệng', 'Chữa', 'Làm sạch vi khuẩn khoang miệng, làm trắng răng, giúp răng mạnh khỏe', 3000000, 2, 6, STRFTIME('%H:%M', '8:00'), STRFTIME('%H:%M', '17:00'));
 INSERT INTO SERVICE(s_name, s_type, s_desc, s_price, s_oday, s_eday, s_otime, s_etime) VALUES('Trồng răng giả', 'Chữa', 'Trồng răng giả, thay răng', 5500000, 2, 6, STRFTIME('%H:%M', '8:00'), STRFTIME('%H:%M', '17:00'));
@@ -273,6 +291,10 @@ INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, rec_indiagno
 -- d. ADMIN
 -- e. PATIENT
 -- f. BLOG
+    --1. Get blog list
+        SELECT b.b_id, b_topic, b_date, b_lastmodified
+        FROM BLOG b LEFT JOIN BLOG_UPDATE bgup ON b.b_id = bgup.b_id;
+    
 -- g. SERVICE
 -- h. MEDICINE
 -- i. RECORD
