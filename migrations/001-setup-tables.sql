@@ -16,7 +16,7 @@ CREATE TABLE ACCOUNT(
 
 CREATE TABLE DOCTOR(
     d_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    d_name TEXT NOT NULL, 
+    d_name TEXT, 
     d_dateOB INTEGER,
     d_sex TEXT CHECK(d_sex IN ('Nam','Nữ')),
     d_phnu TEXT, 
@@ -25,12 +25,12 @@ CREATE TABLE DOCTOR(
     d_salr REAL,
     d_odate INTEGER,  --Ngày nhậm chức
     d_edate INTEGER,  --Ngày nghỉ việc
-    acc_un INTEGER NOT NULL,
+    acc_un INTEGER,
     FOREIGN KEY (acc_un) REFERENCES ACCOUNT(acc_un)
 );
 CREATE TABLE ADMIN(
     a_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-    a_name TEXT NOT NULL,
+    a_name TEXT,
     a_dateOB INTEGER, 
     a_sex TEXT CHECK(a_sex IN ('Nam','Nữ')), 
     a_phnu TEXT, 
@@ -38,33 +38,33 @@ CREATE TABLE ADMIN(
     a_salr REAL, 
     a_odate INTEGER, 
     a_edate INTEGER, 
-    acc_un INTEGER NOT NULL,
+    acc_un INTEGER,
     FOREIGN KEY (acc_un) REFERENCES ACCOUNt(acc_un)
 );
 CREATE TABLE PATIENT(
     p_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-    p_name TEXT NOT NULL,
+    p_name TEXT,
     p_dateOB INTEGER, 
     p_sex TEXT CHECK(p_sex IN ('Nam','Nữ')), 
     p_ethnic TEXT,
     p_BHXH TEXT,
     p_phnu TEXT, 
     p_email TEXT,
-    p_type TEXT NOT NULL CHECK(p_type IN ('Thường','Vip')), 
+    p_type TEXT CHECK(p_type IN ('Thường','Vip')), 
     acc_un INTEGER,
     FOREIGN KEY (acc_un) REFERENCES ACCOUNT(acc_un)
 );
 
 CREATE TABLE BLOG(
     b_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-    b_date INTEGER NOT NULL, 
-    b_topic TEXT NOT NULL, 
+    b_date INTEGER, 
+    b_topic TEXT, 
     b_head TEXT,
     b_body TEXT
 );
 CREATE TABLE SERVICE(
     s_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-    s_name TEXT NOT NULL, 
+    s_name TEXT, 
     s_type TEXT, 
     s_desc TEXT, 
     s_price REAL, 
@@ -75,8 +75,8 @@ CREATE TABLE SERVICE(
 );
 CREATE TABLE MEDICINE(
     m_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-    m_name TEXT NOT NULL, 
-    m_price TEXT NOT NULL, 
+    m_name TEXT, 
+    m_price TEXT, 
     m_orig TEXT, 
     m_func TEXT, 
     m_amnt TEXT,
@@ -142,7 +142,7 @@ CREATE TABLE RECORD_DETAIL(
     recDet_conclusion TEXT,
     recDet_examineday INTEGER, --ngày khám
     recDet_reexamineday INTEGER, --ngày tái khám--
-    rec_id INTEGER NOT NULL,
+    rec_id INTEGER,
     FOREIGN KEY (rec_id) REFERENCES RECORD(rec_id)
 );
 /* 2.DELETE TABLE, ROW */
