@@ -94,7 +94,7 @@ CREATE TABLE COMMENT(
     acc_un TEXT NOT NULL, 
     b_id INTEGER NOT NULL, 
     c_content TEXT, 
-    c_time INTERGER,
+    c_time INTEGER,
     FOREIGN KEY (acc_un) REFERENCES ACCOUNT(acc_un),
     FOREIGN KEY (b_id) REFERENCES BLOG(b_id)
 );
@@ -110,6 +110,7 @@ CREATE TABLE BUY_LIST(
 );
 CREATE TABLE APPOINTMENT(
     appoint_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    appoint_status TEXT CHECK(appoint_status IN ('waiting','approved','canceled')),
     p_id INTEGER, 
     d_id INTEGER, 
     s_id INTEGER, 
@@ -126,25 +127,21 @@ CREATE TABLE APPOINTMENT(
 
 CREATE TABLE RECORD(
     rec_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-    rec_date INTEGER,
+    rec_date INTEGER,        --ngày tạo hồ sơ bệnh án
     rec_lastmodified INTEGER,
     rec_dease TEXT, 
     rec_desc TEXT, 
+    rec_indiagnose TEXT,  --chẩn đoán lúc vào viện
+    rec_outdiagnose TEXT,  --chẩn đoán lúc ra viện
+    rec_description TEXT,
+    rec_conclusion TEXT,
+    rec_examineday INTEGER, --ngày bắt đầu khám
+    rec_reexamineday INTEGER, --ngày tái khám--
     appoint_id INTEGER NOT NULL,
     FOREIGN KEY (appoint_id) REFERENCES APPOINTMENT(appoint_id)
 );
 
-CREATE TABLE RECORD_DETAIL(
-    recDet_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    recDet_indiagnose TEXT,  --chẩn đoán lúc vào viện
-    recDet_outdiagnose TEXT,  --chẩn đoán lúc ra viện
-    recDet_description TEXT,
-    recDet_conclusion TEXT,
-    recDet_examineday INTEGER, --ngày khám
-    recDet_reexamineday INTEGER, --ngày tái khám--
-    rec_id INTEGER,
-    FOREIGN KEY (rec_id) REFERENCES RECORD(rec_id)
-);
+
 /* 2.DELETE TABLE, ROW */
     -- a. DELETE TABLE
         /*
@@ -243,27 +240,27 @@ INSERT INTO MEDICINE(m_name, m_price, m_orig, m_func, m_amnt,m_unit) VALUES('Tif
 --INSERT INTO BUY_LIST VALUES();
 
 -- l. APPOINTMENT
-INSERT INTO APPOINTMENT VALUES(1,1,1,1,STRFTIME('%Y-%m-%d', '2020-01-13'),STRFTIME('%H:%M', '17:00'),STRFTIME('%H:%M', '18:00'), 'BienHoa','408','Khám răng sâu');
-INSERT INTO APPOINTMENT VALUES(2,2,1,1,STRFTIME('%Y-%m-%d', '2012-12-22'),STRFTIME('%H:%M', '08:00'),STRFTIME('%H:%M', '10:00'), 'BienHoa','501','Khám lợi');
-INSERT INTO APPOINTMENT VALUES(3,5,2,1,STRFTIME('%Y-%m-%d', '2010-01-04'),STRFTIME('%H:%M', '09:30'),STRFTIME('%H:%M', '11:00'), 'BienHoa','123','Nhổ răng');
-INSERT INTO APPOINTMENT VALUES(4,1,3,1,STRFTIME('%Y-%m-%d', '2008-11-13'),STRFTIME('%H:%M', '13:00'),STRFTIME('%H:%M', '14:00'), 'BienHoa','289','Trồng răng');
-INSERT INTO APPOINTMENT VALUES(5,5,4,1,STRFTIME('%Y-%m-%d', '2002-02-24'),STRFTIME('%H:%M', '08:30'),STRFTIME('%H:%M', '10:00'), 'BienHoa','111','Nhổ răng');
+INSERT INTO APPOINTMENT VALUES(1,'waiting',1,1,1,STRFTIME('%Y-%m-%d', '2020-01-13'),STRFTIME('%H:%M', '17:00'),STRFTIME('%H:%M', '18:00'), 'BienHoa','408','Khám răng sâu');
+INSERT INTO APPOINTMENT VALUES(2,'waiting',2,1,1,STRFTIME('%Y-%m-%d', '2012-12-22'),STRFTIME('%H:%M', '08:00'),STRFTIME('%H:%M', '10:00'), 'BienHoa','501','Khám lợi');
+INSERT INTO APPOINTMENT VALUES(3,'waiting',5,2,1,STRFTIME('%Y-%m-%d', '2010-01-04'),STRFTIME('%H:%M', '09:30'),STRFTIME('%H:%M', '11:00'), 'BienHoa','123','Nhổ răng');
+INSERT INTO APPOINTMENT VALUES(4,'waiting',1,3,1,STRFTIME('%Y-%m-%d', '2008-11-13'),STRFTIME('%H:%M', '13:00'),STRFTIME('%H:%M', '14:00'), 'BienHoa','289','Trồng răng');
+INSERT INTO APPOINTMENT VALUES(5,'waiting',5,4,1,STRFTIME('%Y-%m-%d', '2002-02-24'),STRFTIME('%H:%M', '08:30'),STRFTIME('%H:%M', '10:00'), 'BienHoa','111','Nhổ răng');
 
 --SELECT * FROM APPOINTMENT;
 
 -- m. RECORD
-INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2020-01-13 17:30'), STRFTIME('%Y-%m-%d %H:%M','2020-01-13 17:30'), 'Sâu răng', 'Bệnh nhân 8 tuổi có 1 răng sâu ở miệng bên phải', 1);
-INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2020-12-22 08:30'), STRFTIME('%Y-%m-%d %H:%M','2020-12-22 08:30'), 'Viêm lợi', 'Bệnh nhân 20 tuổi nổi mụn nhọt ở lợi', 2);
-INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2010-01-04 10:00'), STRFTIME('%Y-%m-%d %H:%M','2010-01-04 10:00'), 'Răng lung lay', NULL, 3);
-INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2018-11-13 13:15'), STRFTIME('%Y-%m-%d %H:%M','2018-11-13 13:15'), 'Thay răng', 'Bệnh nhân 50 tuổi trồng răng giả', 4);
-INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2002-02-23 09:05'), STRFTIME('%Y-%m-%d %H:%M','2002-02-23 09:05'), 'Sâu răng', 'Bệnh nhân 12 tuổi có 1 răng sâu ở miệng bên trái', 5);
+INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, rec_indiagnose, rec_outdiagnose, rec_description,rec_conclusion ,rec_examineday , rec_reexamineday, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2020-01-13 17:30'), STRFTIME('%Y-%m-%d %H:%M','2020-01-13 17:30'), 'Sâu răng',
+'Bệnh nhân 8 tuổi có 1 răng sâu ở miệng bên phải','Sâu 2 răng hàm','Đã nhổ răng sâu',NULL,'Khỏi bệnh',STRFTIME('%Y-%m-%d','2020-01-13'),NULL, 1);
+INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, rec_indiagnose, rec_outdiagnose, rec_description,rec_conclusion ,rec_examineday , rec_reexamineday, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2020-12-22 08:30'), STRFTIME('%Y-%m-%d %H:%M','2020-12-22 08:30'), 'Viêm lợi',
+'Bệnh nhân 20 tuổi nổi mụn nhọt ở lợi', 'Viêm lợi do nóng trong người','Đã cấp thuốc',NULL,'Khỏi bệnh',STRFTIME('%Y-%m-%d','2020-12-22'),NULL, 2);
+INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, rec_indiagnose, rec_outdiagnose, rec_description,rec_conclusion ,rec_examineday , rec_reexamineday, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2010-01-04 10:00'), STRFTIME('%Y-%m-%d %H:%M','2010-01-04 10:00'), 'Răng lung lay',
+NULL, 'Răng cửa bị lung lay','Đã nhổ răng sâu',NULL,'Khỏi bệnh',STRFTIME('%Y-%m-%d','2010-01-04'),NULL, 3);
+INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, rec_indiagnose, rec_outdiagnose, rec_description,rec_conclusion ,rec_examineday , rec_reexamineday, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2018-11-13 13:15'), STRFTIME('%Y-%m-%d %H:%M','2018-11-13 13:15'), 'Thay răng',
+'Bệnh nhân 50 tuổi trồng răng giả', 'Trồng răng giả','Đã trồng 1 răng giả',NULL,'Khỏi bệnh',STRFTIME('%Y-%m-%d','2018-11-13'),NULL, 4);
+INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, rec_indiagnose, rec_outdiagnose, rec_description,rec_conclusion ,rec_examineday , rec_reexamineday, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2002-02-23 09:05'), STRFTIME('%Y-%m-%d %H:%M','2002-02-23 09:05'), 'Sâu răng', 
+'Bệnh nhân 12 tuổi có 1 răng sâu ở miệng bên trái', 'Sâu 2 răng hàm','Đã nhổ răng sâu',NULL,'Khỏi bệnh',STRFTIME('%Y-%m-%d','2020-01-13'),NULL, 5);
 
---n. RECORD_DETAIL
-INSERT INTO RECORD_DETAIL(recDet_indiagnose, recDet_outdiagnose, recDet_description,recDet_conclusion ,recDet_examineday , recDet_reexamineday , rec_id) VALUES('Sâu 2 răng hàm','Đã nhổ răng sâu',NULL,'Khỏi bệnh',STRFTIME('%Y-%m-%d','2020-01-13'),NULL,1);
-INSERT INTO RECORD_DETAIL(recDet_indiagnose, recDet_outdiagnose, recDet_description,recDet_conclusion ,recDet_examineday , recDet_reexamineday , rec_id) VALUES('Viêm lợi do nóng trong người','Đã cấp thuốc',NULL,'Khỏi bệnh',STRFTIME('%Y-%m-%d','2020-12-22'),NULL,2);
-INSERT INTO RECORD_DETAIL(recDet_indiagnose, recDet_outdiagnose, recDet_description,recDet_conclusion ,recDet_examineday , recDet_reexamineday , rec_id) VALUES('Răng cửa bị lung lay','Đã nhổ răng sâu',NULL,'Khỏi bệnh',STRFTIME('%Y-%m-%d','2010-01-04'),NULL,3);
-INSERT INTO RECORD_DETAIL(recDet_indiagnose, recDet_outdiagnose, recDet_description,recDet_conclusion ,recDet_examineday , recDet_reexamineday , rec_id) VALUES('Trồng răng giả','Đã trồng 1 răng giả',NULL,'Khỏi bệnh',STRFTIME('%Y-%m-%d','2018-11-13'),NULL,4);
-INSERT INTO RECORD_DETAIL(recDet_indiagnose, recDet_outdiagnose, recDet_description,recDet_conclusion ,recDet_examineday , recDet_reexamineday , rec_id) VALUES('Sâu 2 răng hàm','Đã nhổ răng sâu',NULL,'Khỏi bệnh',STRFTIME('%Y-%m-%d','2020-01-13'),NULL,5);
+--SELECT * FROM RECORD;
 
 /* 4.QUERY ROWS */
 -- a. Query ALL 
@@ -283,6 +280,10 @@ INSERT INTO RECORD_DETAIL(recDet_indiagnose, recDet_outdiagnose, recDet_descript
         SELECT rec_id, rec_dease, d_id, rec_date, rec_lastmodified
         FROM RECORD rec INNER JOIN APPOINTMENT app ON rec.appoint_id = app.appoint_id
         WHERE app.p_id = 1;
+    --2. Get record detail of a record
+        SELECT p_name,rec_dease, p_dateOB, p_sex, p_ethnic, p_BHXH, p_type, rec_indiagnose, rec_outdiagnose, rec_description, rec_conclusion, rec_examineday, rec_reexamineday
+        FROM PATIENT p INNER JOIN APPOINTMENT app ON p.p_id = app.p_id INNER JOIN RECORD rec ON app.appoint_id = rec.appoint_id
+        WHERE rec.rec_id = 1; 
         
 -- k. BLOG_AUTHOR
 -- l. COMMENT
@@ -296,11 +297,7 @@ INSERT INTO RECORD_DETAIL(recDet_indiagnose, recDet_outdiagnose, recDet_descript
         FROM APPOINTMENT
         WHERE p_id = 1;
 
--- s. RECORD_DETAIL
-    -- 1. Get record detail of a record
-        SELECT p_name,rec_dease, p_dateOB, p_sex, p_ethnic, p_BHXH, p_type, recDet_indiagnose, recDet_outdiagnose, recDet_description, recDet_conclusion, recDet_examineday, recDet_reexamineday
-        FROM PATIENT p INNER JOIN APPOINTMENT app ON p.p_id = app.p_id INNER JOIN RECORD rec ON app.appoint_id = rec.appoint_id INNER JOIN RECORD_DETAIL recDet ON rec.rec_id = recDet.rec_id
-        WHERE rec.rec_id = 1; 
+        
 
 
 
