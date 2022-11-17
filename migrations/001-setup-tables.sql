@@ -175,7 +175,16 @@ INSERT INTO SERVICE(s_name, s_type, s_desc, s_price, s_oday, s_eday, s_otime, s_
 INSERT INTO MEDICINE(m_name, m_price, m_orig, m_func, m_amnt,m_unit) VALUES('Paracetamon', 50000, 'Đức', 'Giảm đau đầu, chóng mặt, buồn nôn', 30, 'hộp');
 
 -- -- h. RECORD
--- --INSERT INTO RECORD VALUES();
+INSERT INTO RECORD(rec_id,
+rec_day,
+rec_dease,
+rec_desc,
+appoint_id) VALUES(1,'123','123','123',1);
+INSERT INTO RECORD(rec_id,
+rec_day,
+rec_dease,
+rec_desc,
+appoint_id) VALUES(2,'123','123','123',2);
 
 -- -- i. BLOG_AUTHOR
 -- --INSERT INTO BLOG_AUTHOR VALUES();
@@ -212,7 +221,7 @@ INSERT INTO APPOINTMENT(
     meet_room     , 
     meet_desc  
     ) 
-    VALUES('waiting',1,1,1,STRFTIME('%Y-%m-%d', '2000-01-13'),STRFTIME('%H:%M', '08:00'),STRFTIME('%H:%M', '10:00'), 'BienHoa','408','Khám sâu');
+    VALUES('waiting',2,2,2,STRFTIME('%Y-%m-%d', '2001-01-13'),STRFTIME('%H:%M', '08:00'),STRFTIME('%H:%M', '10:00'), 'KhanhHoa','405','dau bung');
 -- SELECT * FROM APPOINTMENT;
 -- DELETE FROM APPOINTMENT;
 -- /* 4.QUERY ROWS */
