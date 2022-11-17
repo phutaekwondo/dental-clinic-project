@@ -1,35 +1,39 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import Appointment from "../../../classes/appointment.mjs";
-import { respondWithJson } from "../../../helpers/response-helper";
+import { ppid } from "process";
 import { GetDatabase } from "../../../helpers/database/database-helper.mjs";
 
 export default async function DeleteRecord(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    //METHOD POST
-    //Check id appointment id by patient id
-    const appointment = await Appointment.GetAllAppointmentsByPatientId(
-        req.body.patient_id
-    );
-    if (appointment) {
-        const db = await GetDatabase();
-        //delete record by appointment id if it's found
-        try {
-            await db.run(
-                `DELETE FROM  RECORD WHERE appoint_id =${appointment[0].id}`
-            );
+    const db = await GetDatabase();
+    if (req.body.rec_id) {
+        let record = await db.get(
+            `SELECT * FROM RECORD WHERE rec_id=${req.body.rec_id}`
+        );
+        console.log("arrReCORDS: ", record);
+        if (record) {
+            try {
+                await db.run(
+                    `DELETE FROM RECORD WHERE rec_id=${record.rec_id}`
+                );
+                return res.status(200).json({
+                    code: 0,
+                    message: "Delete succeed!",
+                });
+            } catch (e) {
+                console.log(">>ERROR: ", e);
+            }
+        } else {
             return res.status(200).json({
-                code: 0,
-                message: "Delete success!",
+                code: 1,
+                message: "This record don't exist!",
             });
-        } catch (e) {
-            console.log("Error: ", e);
         }
     } else {
         return res.status(200).json({
-            code: 1,
-            message: "This appointment not found!",
+            code: 2,
+            message: "You missing request id Record",
         });
     }
 }

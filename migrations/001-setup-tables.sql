@@ -180,6 +180,7 @@ rec_day,
 rec_dease,
 rec_desc,
 appoint_id) VALUES(1,'123','123','123',1);
+
 INSERT INTO RECORD(rec_id,
 rec_day,
 rec_dease,
