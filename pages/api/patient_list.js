@@ -19,14 +19,11 @@ export default async function handler(req, res) {
     } catch {
         return res.status(403).json({message: "FAIL"});
     } finally {
+        // Ngắt kết nối với database
         db.close((err) => {
             if (err) throw err;
         });
     }
-    // Ngắt kết nối với database
-    db.close((err) => {
-        if (err) throw err;
-    });
     // Nếu thành công thì chương trình sẽ không thể thực thi tới đây do đã return trong khối try catch
     // Nếu tới đây thì nghĩa đoạn code bị lỗi -> return res status 500 internal error
     return res.status(500).json({message: "FAIL"}).end();
