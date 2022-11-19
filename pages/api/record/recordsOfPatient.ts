@@ -17,13 +17,13 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 	var data = await Record.GetDataFor_RecordsOfPatientAPI(p_id);
 
 	if(data == "rec_id not found") {
-		return respondWithJson(res, 0, "rec_id not found");
+		return respondWithJson(res, 2, "rec_id not found");
 	}
     else if(data == "p_id not found") {
 		return respondWithJson(res, 0, "p_id not found");
     }
     else if(data == "d_id not found") {
-		return respondWithJson(res, 0, "d_id not found");
+		return respondWithJson(res, 3, "d_id not found");
     }
     else{
 		return respondWithJson(res, 1, data);

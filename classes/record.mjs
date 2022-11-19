@@ -69,7 +69,7 @@ export default class Record{
         
 		var data = await db.all('select * from PATIENT as p join APPOINTMENT as ap on p.p_id = ap.p_id join Record as rec on rec.appoint_id = ap.appoint_id join DOCTOR as d on d.d_id = ap.d_id where p.p_id = ?', p_id);
 
-        if (!data){
+        if (!data[0]){
             return "p_id not found"
         }
         else if (!data[0].rec_id){
