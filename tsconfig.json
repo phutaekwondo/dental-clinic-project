@@ -23,7 +23,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "classes/patient.mjs", "classes/person.mjs"  ],
+, "classes/patient.mjs", "classes/person.mjs", "helpers/datetime-helpers.mjs", "test.mjs"  ],
   "exclude": [
     "node_modules"
   ]

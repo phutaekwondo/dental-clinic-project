@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 // import api resquest response from next
 import {NextApiRequest, NextApiResponse} from 'next';
-import { CheckFields } from '../../../helpers/request-helper';
+import { CheckFields, IsDateAndTimeFormatted} from '../../../helpers/request-helper';
 import { respondWithJson } from '../../../helpers/response-helper';
 import Patient from '../../../classes/patient.mjs';
 
@@ -11,6 +11,13 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 	// check fields
 	const fields = [ 'patient_id', 'day','time','description' ] ;
 
+	// check date and time format
+	if ( IsDateAndTimeFormatted(req, ['day'], ['time']) !== true ) {
+		return respondWithJson(res, 0, "Date and time format is not correct");
+	}
+	
+	
+	// check if all fields are present in request body
 	const result = CheckFields(req, fields);
 	if (result !== true) {
 		return respondWithJson(res, 0, result);

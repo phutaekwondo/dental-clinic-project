@@ -18,6 +18,12 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000). There will be a page that show how many APIs we have
 
+## Deploy
+
+Our deployed site: https://dental-clinic-project.herokuapp.com/
+
+Every change on main branch, it will auto deploy to the site above.
+
 ## Write APIs
 The `pages/api` contain our APIs, create files and write in it. Work hard, bro!
 
