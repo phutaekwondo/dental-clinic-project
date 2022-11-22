@@ -105,6 +105,7 @@ CREATE TABLE COMMENT(
     b_id INTEGER NOT NULL, 
     c_content TEXT, 
     c_time INTEGER,
+    PRIMARY KEY (acc_un, b_id, c_time),
     FOREIGN KEY (acc_un) REFERENCES ACCOUNT(acc_un),
     FOREIGN KEY (b_id) REFERENCES BLOG(b_id)
 );
@@ -114,7 +115,7 @@ CREATE TABLE BUY_LIST(
     buy_day INTEGER, 
     amount INTEGER, 
     price REAL,
-    PRIMARY KEY (p_id,m_id),
+    PRIMARY KEY (p_id,m_id, buy_day),
     FOREIGN KEY (p_id) REFERENCES PATIENT(p_id),
     FOREIGN KEY (m_id) REFERENCES MEDICINE(m_id)
 );
