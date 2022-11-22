@@ -46,6 +46,7 @@ CREATE TABLE PATIENT(
     p_name TEXT,
     p_dateOB INTEGER, 
     p_sex TEXT CHECK(p_sex IN ('Nam','Nữ')), 
+    p_address TEXT,
     p_ethnic TEXT,
     p_BHXH TEXT,
     p_phnu TEXT, 
@@ -204,11 +205,11 @@ INSERT INTO ADMIN(a_name, a_dateOB, a_sex, a_phnu, a_email,a_salr, a_odate, a_ed
 
 
 -- d. PATIENT
-INSERT INTO PATIENT(p_name,p_dateOB, p_sex, p_ethnic,p_BHXH,p_phnu, p_email,p_type, acc_un) VALUES('Lê Anh Tuyết', STRFTIME('%d/%m/%Y', '1982-04-06'), 'Nữ', 'Kinh', NULL, '0927883174', 'anhtuyet@gmail.com', 'Thường', 'anh_tuyet');
-INSERT INTO PATIENT(p_name,p_dateOB, p_sex, p_ethnic,p_BHXH,p_phnu, p_email,p_type, acc_un) VALUES('Ngô Gia Lộc', STRFTIME('%d/%m/%Y', '2000-12-20'), 'Nam', 'Kinh', NULL, '0924883175', 'gialoc@gmail.com', 'Vip', 'gia_loc');
-INSERT INTO PATIENT(p_name,p_dateOB, p_sex, p_ethnic,p_BHXH,p_phnu, p_email,p_type, acc_un) VALUES('Trịnh Thu Phương', STRFTIME('%d/%m/%Y', '1983-04-12'), 'Nữ', 'Kinh', NULL, '0927483173', 'thuphuong@gmail.com', 'Thường', 'thu_phuong');
-INSERT INTO PATIENT(p_name,p_dateOB, p_sex, p_ethnic,p_BHXH,p_phnu, p_email,p_type, acc_un) VALUES('Hồ Gia Thế', STRFTIME('%d/%m/%Y', '1982-06-30'), 'Nam', 'Kinh', NULL, '0927283171', 'giathe@gmail.com', 'Thường', 'gia_the');
-INSERT INTO PATIENT(p_name,p_dateOB, p_sex, p_ethnic,p_BHXH,p_phnu, p_email,p_type, acc_un) VALUES('Nguyễn Gia Linh', STRFTIME('%d/%m/%Y', '1992-07-31'), 'Nữ', 'Kinh', NULL, '0921233174', 'gialinh@gmail.com', 'Vip', 'gia_linh');
+INSERT INTO PATIENT(p_name,p_dateOB, p_sex, p_address, p_ethnic,p_BHXH,p_phnu, p_email,p_type, acc_un) VALUES('Lê Anh Tuyết', STRFTIME('%d/%m/%Y', '1982-04-06'), 'Nữ', '22/4 khu phố 2, huyện Đồng Khởi, tỉnh Đồng Nai', 'Kinh', NULL, '0927883174', 'anhtuyet@gmail.com', 'Thường', 'anh_tuyet');
+INSERT INTO PATIENT(p_name,p_dateOB, p_sex, p_address, p_ethnic,p_BHXH,p_phnu, p_email,p_type, acc_un) VALUES('Ngô Gia Lộc', STRFTIME('%d/%m/%Y', '2000-12-20'), 'Nam', '137/10 khu phố 1, huyện Tân Bình, tỉnh Bến Tre', 'Kinh', NULL, '0924883175', 'gialoc@gmail.com', 'Vip', 'gia_loc');
+INSERT INTO PATIENT(p_name,p_dateOB, p_sex, p_address, p_ethnic,p_BHXH,p_phnu, p_email,p_type, acc_un) VALUES('Trịnh Thu Phương', STRFTIME('%d/%m/%Y', '1983-04-12'), 'Nữ', '71/4A khu phố 10, huyện Bến Nghé, tỉnh Kiên Giang', 'Kinh', NULL, '0927483173', 'thuphuong@gmail.com', 'Thường', 'thu_phuong');
+INSERT INTO PATIENT(p_name,p_dateOB, p_sex, p_address, p_ethnic,p_BHXH,p_phnu, p_email,p_type, acc_un) VALUES('Hồ Gia Thế', STRFTIME('%d/%m/%Y', '1982-06-30'), 'Nam', '99/123 khu phố 4, huyện Long Thành, tỉnh Đồng Nai', 'Kinh', NULL, '0927283171', 'giathe@gmail.com', 'Thường', 'gia_the');
+INSERT INTO PATIENT(p_name,p_dateOB, p_sex, p_address, p_ethnic,p_BHXH,p_phnu, p_email,p_type, acc_un) VALUES('Nguyễn Gia Linh', STRFTIME('%d/%m/%Y', '1992-07-31'), 'Nữ', '11/3B khu phố 7, quận 5, thành phố Hồ Chí Minh ', 'Kinh', NULL, '0921233174', 'gialinh@gmail.com', 'Vip', 'gia_linh');
 
 --SELECT * FROM PATIENT;
 
@@ -291,35 +292,36 @@ INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, rec_indiagno
 -- d. ADMIN
 -- e. PATIENT
 -- f. BLOG
-    -- --1. Get blog list
-    --     SELECT b.b_id, b_topic, b_date, b_lastmodified
-    --     FROM BLOG b LEFT JOIN BLOG_UPDATE bgup ON b.b_id = bgup.b_id;
+    --1. Get blog list
+        SELECT b.b_id, b_topic, b_date, b_lastmodified
+        FROM BLOG b LEFT JOIN BLOG_UPDATE bgup ON b.b_id = bgup.b_id;
     
 -- g. SERVICE
 -- h. MEDICINE
 -- i. RECORD
-    -- -- 1. Get records of patient
-    --     SELECT rec_id, rec_dease, d_id, rec_date, rec_lastmodified
-    --     FROM RECORD rec INNER JOIN APPOINTMENT app ON rec.appoint_id = app.appoint_id
-    --     WHERE app.p_id = 1;
-    -- --2. Get record detail of a record
-    --     SELECT p_name,rec_dease, p_dateOB, p_sex, p_ethnic, p_BHXH, p_type, rec_indiagnose, rec_outdiagnose, rec_description, rec_conclusion, rec_examineday, rec_reexamineday
-    --     FROM PATIENT p INNER JOIN APPOINTMENT app ON p.p_id = app.p_id INNER JOIN RECORD rec ON app.appoint_id = rec.appoint_id
-    --     WHERE rec.rec_id = 1; 
+    -- 1. Get records of patient
+        SELECT rec_id, rec_dease, d_id, rec_date, rec_lastmodified
+        FROM RECORD rec INNER JOIN APPOINTMENT app ON rec.appoint_id = app.appoint_id
+        WHERE app.p_id = 1;
+    --2. Get record detail of a record
+        SELECT p_name,rec_dease, p_dateOB, p_sex, p_ethnic, p_BHXH, p_type, p_address, rec_indiagnose, rec_outdiagnose, rec_description, rec_conclusion, rec_examineday, rec_reexamineday
+        FROM PATIENT p INNER JOIN APPOINTMENT app ON p.p_id = app.p_id INNER JOIN RECORD rec ON app.appoint_id = rec.appoint_id
+        WHERE rec.rec_id = 1; 
         
 -- k. BLOG_AUTHOR
 -- l. COMMENT
 -- m. BUY_LIST
 -- n. APPOINTMENT
-    -- -- 1. Get day and time of appointment 
-    --     SELECT STRFTIME('%d', meet_day) AS MONTH FROM APPOINTMENT; --GET DAY
-    --     SELECT STRFTIME('%H', meet_otime) AS HOUR FROM APPOINTMENT; --GET HOUR
-    -- -- 2. Get all appointment of patient
-    --     SELECT *
-    --     FROM APPOINTMENT
-    --     WHERE p_id = 1;
+    -- 1. Get day and time of appointment 
+        SELECT STRFTIME('%d', meet_day) AS MONTH FROM APPOINTMENT; --GET DAY
+        SELECT STRFTIME('%H', meet_otime) AS HOUR FROM APPOINTMENT; --GET HOUR
+    -- 2. Get all appointment of patient
+        SELECT *
+        FROM APPOINTMENT
+        WHERE p_id = 1;
 
         
+
 
 
 
