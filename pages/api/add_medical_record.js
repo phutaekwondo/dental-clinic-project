@@ -51,22 +51,7 @@ export default async function handler(req, res) {
         }
 
     }
-    // Kiểm tra appoint id trong bảng APPOINTMENT
-    // Vì bảng record cần appoint id là khóa ngoại trỏ tới bảng APPOINTMENT
-    // Hơn nữa appoint id là field not null -> nếu không tìm thấy thì báo lỗi
-    let appoint_id;
-    try {
-        appoint_id = await getAppointID(db, req.body["p_id"])
-        if (appoint_id === null) {
-            db.close();
-            return res.status(403).json({
-                message: "FAIL: Cannot find the appoint id in APPOINTMENT " + "table corresponding to request p_id"
-            });
-        }
-    } catch (err) {
-        db.close();
-        return res.status(403).json({message: err});
-    }
+
     // Thuật toán gán rec_id của API: tính số record có trong table RECORD
     // Sau đó lấy COUNT(*) + 1 = id cho record mới này
     let new_rec_id;
@@ -87,7 +72,7 @@ export default async function handler(req, res) {
         let data = [new_rec_id, rec_date, rec_date, req.body["rec_dease"]
             , req.body["rec_indiagnose"], req.body["rec_outdiagnose"],
             req.body["rec_desc"], req.body["rec_conclusion"], req.body["rec_examineday"],
-            req.body["rec_reexamineday"], appoint_id];
+            req.body["rec_reexamineday"]];
         await insertRecord(db, data);
         return res.status(200).json({message: "SUCCESS"});
     } catch (err) {
@@ -134,17 +119,6 @@ function updatePatient(db, data, p_id) {
     });
 }
 
-function getAppointID(db, p_id) {
-    return new Promise((resolve, reject) => {
-        db.all("SELECT appoint_id FROM APPOINTMENT WHERE p_id = " + p_id, (err, rows) => {
-            if (err) {
-                reject(err);
-            }
-            resolve((rows[0]) ? (rows[0]["appoint_id"]) : null);
-        })
-    });
-}
-
 function countRecID(db) {
     return new Promise((resolve, reject) => {
         db.all("SELECT COUNT(*) FROM RECORD", (err, row) => {
@@ -158,7 +132,9 @@ function countRecID(db) {
 
 function insertRecord(db, data) {
     return new Promise((resolve, reject) => {
-        db.run("INSERT INTO RECORD VALUES(?,?,?,?,?,?,?,?,?,?,?)", data, (err) => {
+        db.run("INSERT INTO RECORD(rec_id, rec_date, rec_lastmodified," +
+            " rec_dease, rec_desc, rec_indiagnose, rec_outdiagnose, rec_conclusion, rec_examineday, rec_reexamineday) " +
+            "VALUES(?,?,?,?,?,?,?,?,?,?)", data, (err) => {
             if (err) {
                 reject(err);
             }
