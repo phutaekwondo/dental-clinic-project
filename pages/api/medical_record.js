@@ -34,15 +34,15 @@ export default async function handler(req, res) {
     return res.status(500).json({message: "FAIL"}).end();
 }
 
+
 function retrieveData(db, id) {
     return new Promise((resolve, reject) => {
         let queryResult = [];
         // Query với cú pháp của sqlite3 (MySQL)
-        // ID, tên bệnh nhân, giới tính, ngày sinh, email
         let sql = "SELECT * FROM RECORD WHERE rec_id = " + id;
         db.all(sql, (err, rows) => {
             if (err) {
-                resolve(err);
+                reject(err);
             }
             // Mỗi element trong array queryResult sẽ chứa 1 JSON về 1 medical record cùng rec_id (mặc dù rec_id là unique)
             rows.forEach((row) => {
