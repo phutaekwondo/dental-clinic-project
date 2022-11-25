@@ -147,7 +147,7 @@ CREATE TABLE RECORD(
     rec_conclusion TEXT,
     rec_examineday INTEGER, --ngày bắt đầu khám
     rec_reexamineday INTEGER, --ngày tái khám--
-    appoint_id INTEGER,
+    appoint_id INTEGER NOT NULL,
     FOREIGN KEY (appoint_id) REFERENCES APPOINTMENT(appoint_id)
 );
 
