@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     // Mở kết nối với database
     const db = new sqlite3.Database("./database.sqlite", sqlite3.OPEN_READWRITE, (err) => {
         if (err) {
-            return res.status(403).json({message: "FAIL: Cannot connect to database1"});
+            return res.status(403).json({message: "FAIL: Cannot connect to database"});
         }
     });
     // Kiểm tra p_id có tồn tại trong request lẫn database không
@@ -47,7 +47,7 @@ export default async function handler(req, res) {
             await insertPatient(db, data);
         } catch (err) {
             db.close();
-            return res.status(403).json({message: "FAIL: Cannot connect to database2"});
+            return res.status(403).json({message: "FAIL: Cannot connect to database"});
         }
     } else {
         let data = [req.body["p_dateOB"],
@@ -57,7 +57,7 @@ export default async function handler(req, res) {
 
         } catch (err) {
             db.close();
-            return res.status(403).json({message: "FAIL: Cannot connect to database3"});
+            return res.status(403).json({message: "FAIL: Cannot connect to database"});
         }
 
     }
@@ -69,7 +69,7 @@ export default async function handler(req, res) {
     }
     catch (err){
         db.close();
-        return res.status(403).json({message: "FAIL: Cannot connect to database4"});
+        return res.status(403).json({message: "FAIL: Cannot connect to database"});
     }
     // Insert new record
     try {
@@ -77,7 +77,7 @@ export default async function handler(req, res) {
         await insertAppointment(db, data);
     }catch (err){
         db.close();
-        return res.status(403).json({message: err});
+        return res.status(403).json({message: "FAIL: Cannot connect to database"});
     }
 
 
