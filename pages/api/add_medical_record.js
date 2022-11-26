@@ -88,7 +88,7 @@ export default async function handler(req, res) {
         new_rec_id++;
     } catch (err) {
         db.close();
-        return res.status(403).json({message: "FAIL: Cannot connect to database6"});
+        return res.status(403).json({message: "FAIL: Cannot connect to database"});
     }
     // Insert vào RECORD table
     try {
@@ -99,7 +99,7 @@ export default async function handler(req, res) {
         await insertRecord(db, data);
         return res.status(200).json({message: "SUCCESS"});
     } catch (err) {
-        return res.status(403).json({message: err});
+        return res.status(403).json({message: "FAIL: Cannot connect to database"});
     } finally {
         db.close();
     }
