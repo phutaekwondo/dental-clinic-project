@@ -63,19 +63,18 @@ export default async function handler(req, res) {
     }
     // Tạo appointment id mới
     let appoint_id;
-    try{
+    try {
         appoint_id = await countAppointID(db);
         appoint_id++;
-    }
-    catch (err){
+    } catch (err) {
         db.close();
         return res.status(403).json({message: "FAIL: Cannot connect to database"});
     }
     // Insert new record
     try {
-        let data = [appoint_id, "waiting" ,p_id, req.body["d_id"]];
+        let data = [appoint_id, "waiting", p_id, req.body["d_id"]];
         await insertAppointment(db, data);
-    }catch (err){
+    } catch (err) {
         db.close();
         return res.status(403).json({message: "FAIL: Cannot connect to database"});
     }
@@ -93,19 +92,14 @@ export default async function handler(req, res) {
     }
     // Insert vào RECORD table
     try {
-        let date = new Date();
-        let month = date.getMonth() + 1;
-        // Ngày tạo hồ sơ bệnh án
-        let rec_date = parseInt("" + date.getDate() + month + date.getFullYear());
-
-        let data = [new_rec_id, rec_date, rec_date, req.body["rec_dease"]
+        let data = [new_rec_id, req.body["rec_dease"]
             , req.body["rec_indiagnose"], req.body["rec_outdiagnose"],
             req.body["rec_desc"], req.body["rec_conclusion"], req.body["rec_examineday"],
             req.body["rec_reexamineday"], appoint_id];
         await insertRecord(db, data);
         return res.status(200).json({message: "SUCCESS"});
     } catch (err) {
-        return res.status(403).json({message: "FAIL"});
+        return res.status(403).json({message: err});
     } finally {
         db.close();
     }
@@ -195,7 +189,7 @@ function countRecID(db) {
 
 function insertRecord(db, data) {
     return new Promise((resolve, reject) => {
-        db.run("INSERT INTO RECORD VALUES(?,?,?,?,?,?,?,?,?,?,?)", data, (err) => {
+        db.run("INSERT INTO RECORD VALUES(?, strftime('%Y-%m-%d', 'now'), strftime('%Y-%m-%d', 'now'), ?, ?, ?, ?, ?, ?, ?, ?)", data, (err) => {
             if (err) {
                 reject(err);
             }
