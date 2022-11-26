@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     // Mở kết nối với database
     const db = new sqlite3.Database("./database.sqlite", sqlite3.OPEN_READWRITE, (err) => {
         if (err) {
-            return res.status(403).json({message: "FAIL: Cannot connect to database"});
+            return res.status(403).json({message: "FAIL: Cannot connect to database1"});
         }
     });
     // Kiểm tra p_id có tồn tại trong request lẫn database không
@@ -47,7 +47,7 @@ export default async function handler(req, res) {
             await insertPatient(db, data);
         } catch (err) {
             db.close();
-            return res.status(403).json({message: "FAIL: Cannot connect to database"});
+            return res.status(403).json({message: "FAIL: Cannot connect to database2"});
         }
     } else {
         let data = [req.body["p_dateOB"],
@@ -57,19 +57,27 @@ export default async function handler(req, res) {
 
         } catch (err) {
             db.close();
-            return res.status(403).json({message: "FAIL: Cannot connect to database"});
+            return res.status(403).json({message: "FAIL: Cannot connect to database3"});
         }
 
     }
-    // Tạo appointment mới
-    let appoint_id = await countAppointID(db);
-    appoint_id++;
+    // Tạo appointment id mới
+    let appoint_id;
+    try{
+        appoint_id = await countAppointID(db);
+        appoint_id++;
+    }
+    catch (err){
+        db.close();
+        return res.status(403).json({message: "FAIL: Cannot connect to database4"});
+    }
+    // Insert new record
     try {
-        let data = [appoint_id, p_id, req.body["d_id"]];
+        let data = [appoint_id, "waiting" ,p_id, req.body["d_id"]];
         await insertAppointment(db, data);
     }catch (err){
         db.close();
-        return res.status(403).json({message: "FAIL: Cannot connect to database"});
+        return res.status(403).json({message: err});
     }
 
 
@@ -81,7 +89,7 @@ export default async function handler(req, res) {
         new_rec_id++;
     } catch (err) {
         db.close();
-        return res.status(403).json({message: "FAIL: Cannot connect to database"});
+        return res.status(403).json({message: "FAIL: Cannot connect to database6"});
     }
     // Insert vào RECORD table
     try {
@@ -97,7 +105,7 @@ export default async function handler(req, res) {
         await insertRecord(db, data);
         return res.status(200).json({message: "SUCCESS"});
     } catch (err) {
-        return res.status(403).json({message: "FAIL: Cannot connect to database"});
+        return res.status(403).json({message: "FAIL"});
     } finally {
         db.close();
     }
@@ -142,7 +150,7 @@ function updatePatient(db, data, p_id) {
 
 function insertAppointment(db, data) {
     return new Promise((resolve, reject) => {
-        db.run("INSERT INTO APPOINTMENT(appoint_id, p_id, d_id) VALUES(?, ?, ?)", data, (err) => {
+        db.run("INSERT INTO APPOINTMENT(appoint_id, appoint_status, p_id, d_id) VALUES(?, ?, ?, ?)", data, (err) => {
             if (err) {
                 reject(err);
             }
