@@ -34,7 +34,17 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 
 
 	// get appointment instance
-	const appointment = await Appointment.GetAppointmentById(req.body.appointment_id);
+	var appointment;
+	try{
+		appointment = await Appointment.GetAppointmentById(req.body.appointment_id)
+	}
+	catch(err){
+		return respondWithJson(res, 0, err);
+	}
+
+	if (!appointment) {
+		return respondWithJson(res, 0, "Appointment not found");
+	}
 
 	// set properties of appointment instance to request body
 	for (let i = 0; i < fieldsInRequestBody.length; i++) {
