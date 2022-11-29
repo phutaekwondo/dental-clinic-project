@@ -19,6 +19,8 @@ CREATE TABLE DOCTOR(
     d_name TEXT, 
     d_dateOB INTEGER,
     d_sex TEXT CHECK(d_sex IN ('Nam','Nữ')),
+    d_address TEXT,
+    d_ethnic TEXT,
     d_phnu TEXT, 
     d_email TEXT,
     d_position TEXT CHECK(d_position IN ('Nhân viên','Trưởng khoa')), 
@@ -33,11 +35,13 @@ CREATE TABLE ADMIN(
     a_name TEXT,
     a_dateOB INTEGER, 
     a_sex TEXT CHECK(a_sex IN ('Nam','Nữ')), 
+    a_address TEXT,
+    a_ethnic TEXT,
     a_phnu TEXT, 
     a_email TEXT,
     a_salr REAL, 
-    a_odate INTEGER, 
-    a_edate INTEGER, 
+    a_odate INTEGER,  --ngày nhậm chức
+    a_edate INTEGER,  --ngày nghỉ việc
     acc_un INTEGER,
     FOREIGN KEY (acc_un) REFERENCES ACCOUNt(acc_un)
 );
@@ -69,18 +73,18 @@ CREATE TABLE SERVICE(
     s_type TEXT, 
     s_desc TEXT, 
     s_price REAL, 
-    s_oday INTEGER, 
-    s_eday INTEGER, 
-    s_otime INTEGER, 
-    s_etime INTEGER
+    s_oday INTEGER,  --ngày bắt đầu hoạt động trong tuần
+    s_eday INTEGER,  --ngày cuối cùng hoạt động trong tuần
+    s_otime INTEGER, --giờ mở cửa trong ngày
+    s_etime INTEGER  --giờ đóng cửa
 );
 CREATE TABLE MEDICINE(
     m_id INTEGER PRIMARY KEY AUTOINCREMENT, 
     m_name TEXT, 
-    m_price TEXT, 
-    m_orig TEXT, 
-    m_func TEXT, 
-    m_amnt TEXT,
+    m_price TEXT,  
+    m_orig TEXT,    -- xuất xứ
+    m_func TEXT,    -- công dụng
+    m_amnt TEXT,    -- số lượng
     m_unit TEXT CHECK(m_unit IN ('viên','vỉ','hộp'))
 );
 
@@ -114,7 +118,7 @@ CREATE TABLE BUY_LIST(
     m_id INTEGER, 
     buy_day INTEGER, 
     amount INTEGER, 
-    price REAL,
+    sum_price REAL,
     PRIMARY KEY (p_id,m_id, buy_day),
     FOREIGN KEY (p_id) REFERENCES PATIENT(p_id),
     FOREIGN KEY (m_id) REFERENCES MEDICINE(m_id)
@@ -125,12 +129,12 @@ CREATE TABLE APPOINTMENT(
     p_id INTEGER, 
     d_id INTEGER, 
     s_id INTEGER, 
-    meet_day INTEGER,
-    meet_otime INTEGER, 
-    meet_etime INTEGER, 
-    meet_place TEXT, 
-    meet_room TEXT, 
-    meet_desc TEXT,
+    meet_day INTEGER,    --ngày gặp mặt
+    meet_otime INTEGER,  --thời gian gặp
+    meet_etime INTEGER,  --thời gian kết thúc 
+    meet_place TEXT,     --nơi gặp
+    meet_room TEXT,      --phòng gặp
+    meet_desc TEXT,      --miêu tả nội dung cuộc hẹn
     FOREIGN KEY (p_id) REFERENCES PATIENT(p_id),
     FOREIGN KEY (d_id) REFERENCES DOCTOR(d_id),
     FOREIGN KEY (s_id) REFERENCES SERVICE(s_id)
@@ -140,11 +144,11 @@ CREATE TABLE RECORD(
     rec_id INTEGER PRIMARY KEY AUTOINCREMENT, 
     rec_date INTEGER,        --ngày tạo hồ sơ bệnh án
     rec_lastmodified INTEGER,
-    rec_dease TEXT, 
+    rec_dease TEXT, --bệnh
     rec_desc TEXT,  --tóm tắt bệnh án
     rec_indiagnose TEXT,  --chẩn đoán lúc vào viện
     rec_outdiagnose TEXT,  --chẩn đoán lúc ra viện
-    rec_conclusion TEXT,
+    rec_conclusion TEXT,    --kết luận
     rec_examineday INTEGER, --ngày bắt đầu khám
     rec_reexamineday INTEGER, --ngày tái khám--
     appoint_id INTEGER,
@@ -189,17 +193,17 @@ INSERT INTO ACCOUNT VALUES('gia_linh','gialinh123', '/assets/jack.png', 'patient
 --SELECT * FROM ACCOUNT;
 
 -- b. DOCTOR
-INSERT INTO DOCTOR(d_name, d_dateOB, d_sex, d_phnu, d_email, d_position, d_salr, d_odate, d_edate, acc_un) VALUES('Nguyễn Xuân Trường', STRFTIME('%d/%m/%Y', '1983-07-25'), 'Nam', '0921954763', 'xuantruong@gmail.com', 'Nhân viên', 10500000, NULL, NULL, 'xuan_truong');
-INSERT INTO DOCTOR(d_name, d_dateOB, d_sex, d_phnu, d_email, d_position, d_salr, d_odate, d_edate, acc_un) VALUES('Nguyễn Duy Mạnh', STRFTIME('%d/%m/%Y', '1990-03-04'), 'Nam', '0919233458', 'duymanh@gmail.com', 'Nhân viên', 9500000, NULL, NULL, 'duy_manh');
-INSERT INTO DOCTOR(d_name, d_dateOB, d_sex, d_phnu, d_email, d_position, d_salr, d_odate, d_edate, acc_un) VALUES('Lê Thị Huyền Trang', STRFTIME('%d/%m/%Y', '1985-11-14'), 'Nữ', '0188654371', 'huyentrang@gmail.com', 'Nhân viên', 10000000, NULL, NULL, 'huyen_trang');
-INSERT INTO DOCTOR(d_name, d_dateOB, d_sex, d_phnu, d_email, d_position, d_salr, d_odate, d_edate, acc_un) VALUES('Phạm Xuân Nhất', STRFTIME('%d/%m/%Y', '1988-02-01'), 'Nam', '092012348', 'xuannhat@gmail.com', 'Trưởng khoa', 15000000, NULL, NULL, 'xuan_nhat');
-INSERT INTO DOCTOR(d_name, d_dateOB, d_sex, d_phnu, d_email, d_position, d_salr, d_odate, d_edate, acc_un) VALUES('Nguyễn Thu Thủy', STRFTIME('%d/%m/%Y', '1995-10-02'), 'Nữ', '0891071856', 'thuthuy@gmail.com', 'Nhân viên', 10500000, NULL, NULL, 'thu_thuy');
+INSERT INTO DOCTOR(d_name, d_dateOB, d_sex, d_address, d_ethnic, d_phnu, d_email, d_position, d_salr, d_odate, d_edate, acc_un) VALUES('Nguyễn Xuân Trường', STRFTIME('%d/%m/%Y', '1983-07-25'), 'Nam', '23/5 khu phố 2, huyện Đồng Khởi, tỉnh Đồng Nai', 'Kinh', '0921954763', 'xuantruong@gmail.com', 'Nhân viên', 10500000, NULL,NULL, 'xuan_truong');
+INSERT INTO DOCTOR(d_name, d_dateOB, d_sex, d_address, d_ethnic, d_phnu, d_email, d_position, d_salr, d_odate, d_edate, acc_un) VALUES('Nguyễn Duy Mạnh', STRFTIME('%d/%m/%Y', '1990-03-04'), 'Nam', '24/5 khu phố 2, huyện Đồng Khởi, tỉnh Đồng Nai', 'Kinh', '0919233458', 'duymanh@gmail.com', 'Nhân viên', 9500000, NULL,NULL,'duy_manh');
+INSERT INTO DOCTOR(d_name, d_dateOB, d_sex, d_address, d_ethnic, d_phnu, d_email, d_position, d_salr, d_odate, d_edate, acc_un) VALUES('Lê Thị Huyền Trang', STRFTIME('%d/%m/%Y', '1985-11-14'), 'Nữ', '25/5 khu phố 2, huyện Đồng Khởi, tỉnh Đồng Nai', 'Kinh', '0188654371', 'huyentrang@gmail.com', 'Nhân viên', 10000000, NULL,NULL, 'huyen_trang');
+INSERT INTO DOCTOR(d_name, d_dateOB, d_sex, d_address, d_ethnic, d_phnu, d_email, d_position, d_salr, d_odate, d_edate, acc_un) VALUES('Phạm Xuân Nhất', STRFTIME('%d/%m/%Y', '1988-02-01'), 'Nam', '26/5 khu phố 2, huyện Đồng Khởi, tỉnh Đồng Nai', 'Kinh', '092012348', 'xuannhat@gmail.com', 'Trưởng khoa', 15000000, NULL,NULL, 'xuan_nhat');
+INSERT INTO DOCTOR(d_name, d_dateOB, d_sex, d_address, d_ethnic, d_phnu, d_email, d_position, d_salr, d_odate, d_edate, acc_un) VALUES('Nguyễn Thu Thủy', STRFTIME('%d/%m/%Y', '1995-10-02'), 'Nữ', '27/5 khu phố 2, huyện Đồng Khởi, tỉnh Đồng Nai', 'Kinh', '0891071856', 'thuthuy@gmail.com', 'Nhân viên', 10500000, NULL,NULL, 'thu_thuy');
 
 --SELECT * FROM DOCTOR;
 
 -- c. ADMIN
-INSERT INTO ADMIN(a_name, a_dateOB, a_sex, a_phnu, a_email,a_salr, a_odate, a_edate, acc_un) VALUES('Trần Quang Khải', STRFTIME('%d/%m/%Y', '1972-11-13'), 'Nam', '0819655472', 'quangkhai@gmail.com', 8000000, NULL, NULL, 'quang_khai');
-INSERT INTO ADMIN(a_name, a_dateOB, a_sex, a_phnu, a_email,a_salr, a_odate, a_edate, acc_un) VALUES('Phạm Thế Dương', STRFTIME('%d/%m/%Y', '1981-04-29'), 'Nam', '0213890776', 'theduong@gmail.com', 9000000, NULL, NULL, 'the_duong');
+INSERT INTO ADMIN(a_name, a_dateOB, a_sex, a_address, a_ethnic, a_phnu, a_email,a_salr, a_odate, a_edate, acc_un) VALUES('Trần Quang Khải', STRFTIME('%d/%m/%Y', '1972-11-13'), 'Nam', '28/5 khu phố 2, huyện Đồng Khởi, tỉnh Đồng Nai', 'Kinh', '0819655472', 'quangkhai@gmail.com', 8000000, NULL,NULL, 'quang_khai');
+INSERT INTO ADMIN(a_name, a_dateOB, a_sex, a_address, a_ethnic, a_phnu, a_email,a_salr, a_odate, a_edate, acc_un) VALUES('Phạm Thế Dương', STRFTIME('%d/%m/%Y', '1981-04-29'), 'Nam', '29/5 khu phố 2, huyện Đồng Khởi, tỉnh Đồng Nai', 'Kinh', '0213890776', 'theduong@gmail.com', 9000000, NULL,NULL, 'the_duong');
 
 --SELECT * FROM ADMIN;
 
@@ -265,22 +269,27 @@ INSERT INTO APPOINTMENT VALUES(3,'approved',5,2,2,STRFTIME('%Y-%m-%d', '2010-01-
 INSERT INTO APPOINTMENT VALUES(4,'approved',1,3,1,STRFTIME('%Y-%m-%d', '2008-11-13'),STRFTIME('%H:%M', '13:00'),STRFTIME('%H:%M', '14:00'), 'BienHoa','289','Trồng răng');
 INSERT INTO APPOINTMENT VALUES(5,'approved',5,4,3,STRFTIME('%Y-%m-%d', '2002-02-24'),STRFTIME('%H:%M', '08:30'),STRFTIME('%H:%M', '10:00'), 'BienHoa','111','Nhổ răng');
 INSERT INTO APPOINTMENT VALUES(6,'approved',3,3,2,STRFTIME('%Y-%m-%d', '2011-01-04'),STRFTIME('%H:%M', '13:00'),STRFTIME('%H:%M', '18:00'), 'BienHoa','408','Khám răng sâu');
-INSERT INTO APPOINTMENT VALUES(7,'approved',4,5,1,STRFTIME('%Y-%m-%d', '2011-06-03'),STRFTIME('%H:%M', '17:30'),STRFTIME('%H:%M', '18:00'), 'BienHoa','408','Khám răng sâu');
+INSERT INTO APPOINTMENT VALUES(7,'canceled',4,5,1,STRFTIME('%Y-%m-%d', '2011-06-03'),STRFTIME('%H:%M', '17:30'),STRFTIME('%H:%M', '18:00'), 'BienHoa','408','Khám răng sâu');
 INSERT INTO APPOINTMENT VALUES(8,'approved',2,1,2,STRFTIME('%Y-%m-%d', '2012-12-02'),STRFTIME('%H:%M', '08:30'),STRFTIME('%H:%M', '10:00'), 'BienHoa','501','Khám lợi');
 INSERT INTO APPOINTMENT VALUES(9,'approved',5,2,1,STRFTIME('%Y-%m-%d', '2015-07-23'),STRFTIME('%H:%M', '09:30'),STRFTIME('%H:%M', '11:00'), 'BienHoa','123','Nhổ răng');
 INSERT INTO APPOINTMENT VALUES(10,'approved',1,3,2,STRFTIME('%Y-%m-%d', '2008-10-09'),STRFTIME('%H:%M', '13:00'),STRFTIME('%H:%M', '14:00'), 'BienHoa','289','Trồng răng');
 INSERT INTO APPOINTMENT VALUES(11,'approved',4,1,3,STRFTIME('%Y-%m-%d', '2002-02-24'),STRFTIME('%H:%M', '07:30'),STRFTIME('%H:%M', '10:00'), 'BienHoa','223','Nhổ răng');
 INSERT INTO APPOINTMENT VALUES(12,'approved',2,5,1,STRFTIME('%Y-%m-%d', '2017-01-01'),STRFTIME('%H:%M', '14:00'),STRFTIME('%H:%M', '18:00'), 'BienHoa','119','Khám răng sâu');
-INSERT INTO APPOINTMENT VALUES(13,'approved',3,2,1,STRFTIME('%Y-%m-%d', '2009-04-30'),STRFTIME('%H:%M', '15:30'),STRFTIME('%H:%M', '18:00'), 'BienHoa','802','Khám răng sâu');
+INSERT INTO APPOINTMENT VALUES(13,'waiting',3,2,1,STRFTIME('%Y-%m-%d', '2009-04-30'),STRFTIME('%H:%M', '15:30'),STRFTIME('%H:%M', '18:00'), 'BienHoa','802','Khám răng sâu');
 INSERT INTO APPOINTMENT VALUES(14,'approved',1,4,2,STRFTIME('%Y-%m-%d', '2006-12-22'),STRFTIME('%H:%M', '10:00'),STRFTIME('%H:%M', '10:30'), 'BienHoa','432','Khám lợi');
 INSERT INTO APPOINTMENT VALUES(15,'approved',2,1,1,STRFTIME('%Y-%m-%d', '2007-12-04'),STRFTIME('%H:%M', '09:30'),STRFTIME('%H:%M', '11:00'), 'BienHoa','111','Nhổ răng');
-INSERT INTO APPOINTMENT VALUES(16,'approved',5,4,3,STRFTIME('%Y-%m-%d', '2009-06-12'),STRFTIME('%H:%M', '10:30'),STRFTIME('%H:%M', '11:00'), 'BienHoa','271','Trồng răng');
+INSERT INTO APPOINTMENT VALUES(16,'canceled',5,4,3,STRFTIME('%Y-%m-%d', '2009-06-12'),STRFTIME('%H:%M', '10:30'),STRFTIME('%H:%M', '11:00'), 'BienHoa','271','Trồng răng');
 INSERT INTO APPOINTMENT VALUES(17,'approved',3,2,2,STRFTIME('%Y-%m-%d', '2002-02-24'),STRFTIME('%H:%M', '08:30'),STRFTIME('%H:%M', '10:00'), 'BienHoa','111','Nhổ răng');
 INSERT INTO APPOINTMENT VALUES(18,'approved',1,5,1,STRFTIME('%Y-%m-%d', '2020-01-13'),STRFTIME('%H:%M', '17:00'),STRFTIME('%H:%M', '18:00'), 'BienHoa','408','Khám răng sâu');
 INSERT INTO APPOINTMENT VALUES(19,'approved',2,3,2,STRFTIME('%Y-%m-%d', '2021-12-14'),STRFTIME('%H:%M', '17:00'),STRFTIME('%H:%M', '18:00'), 'BienHoa','408','Trồng răng');
 INSERT INTO APPOINTMENT VALUES(20,'waiting',2,1,3,STRFTIME('%Y-%m-%d', '2019-08-02'),STRFTIME('%H:%M', '13:00'),STRFTIME('%H:%M', '14:00'), 'BienHoa','412','Khám răng sâu');
 INSERT INTO APPOINTMENT VALUES(21,'approved',4,2,2,STRFTIME('%Y-%m-%d', '2015-07-07'),STRFTIME('%H:%M', '10:30'),STRFTIME('%H:%M', '11:00'), 'BienHoa','725','Nhổ răng');
 INSERT INTO APPOINTMENT VALUES(22,'approved',3,4,1,STRFTIME('%Y-%m-%d', '2006-04-10'),STRFTIME('%H:%M', '13:00'),STRFTIME('%H:%M', '14:00'), 'BienHoa','289','Trồng răng');
+INSERT INTO APPOINTMENT VALUES(23,'waiting',5,2,1,STRFTIME('%Y-%m-%d', '2006-04-10'),STRFTIME('%H:%M', '13:00'),STRFTIME('%H:%M', '14:00'), 'BienHoa','289','Trồng răng');
+INSERT INTO APPOINTMENT VALUES(24,'canceled',4,4,1,STRFTIME('%Y-%m-%d', '2006-04-10'),STRFTIME('%H:%M', '13:00'),STRFTIME('%H:%M', '14:00'), 'BienHoa','289','Trồng răng');
+INSERT INTO APPOINTMENT VALUES(25,'waiting',3,4,1,STRFTIME('%Y-%m-%d', '2006-04-10'),STRFTIME('%H:%M', '13:00'),STRFTIME('%H:%M', '14:00'), 'BienHoa','289','Trồng răng');
+INSERT INTO APPOINTMENT VALUES(26,'canceled',4,4,1,STRFTIME('%Y-%m-%d', '2006-04-10'),STRFTIME('%H:%M', '13:00'),STRFTIME('%H:%M', '14:00'), 'BienHoa','289','Trồng răng');
+INSERT INTO APPOINTMENT VALUES(27,'waiting',3,4,1,STRFTIME('%Y-%m-%d', '2006-04-10'),STRFTIME('%H:%M', '13:00'),STRFTIME('%H:%M', '14:00'), 'BienHoa','289','Trồng răng');
 
 --SELECT * FROM APPOINTMENT;
 
@@ -309,15 +318,15 @@ INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, rec_indiagno
 
 INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, rec_indiagnose, rec_outdiagnose, rec_conclusion ,rec_examineday , rec_reexamineday, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2011-01-04 15:30'), STRFTIME('%Y-%m-%d %H:%M','2011-01-04 15:30'), 'Khám răng sâu',
 'Bệnh nhân 20 tuổi bị sâu răng', 'Sâu răng hàm','Đã nhổ răng sâu','Khỏi bệnh',STRFTIME('%Y-%m-%d','2011-01-04'),NULL, 6);
-INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, rec_indiagnose, rec_outdiagnose, rec_conclusion ,rec_examineday , rec_reexamineday, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2009-04-30 18:00'), STRFTIME('%Y-%m-%d %H:%M','2009-04-30 18:00'), 'Khám răng sâu',
-'Bệnh nhân 18 tuổi có dấu hiệu sâu răng', 'Sâu răng hàm','Đã tư vấn',NULL,STRFTIME('%Y-%m-%d','2009-04-30'),NULL, 13);
+/*INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, rec_indiagnose, rec_outdiagnose, rec_conclusion ,rec_examineday , rec_reexamineday, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2009-04-30 18:00'), STRFTIME('%Y-%m-%d %H:%M','2009-04-30 18:00'), 'Khám răng sâu',
+'Bệnh nhân 18 tuổi có dấu hiệu sâu răng', 'Sâu răng hàm','Đã tư vấn',NULL,STRFTIME('%Y-%m-%d','2009-04-30'),NULL, 13);*/
 INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, rec_indiagnose, rec_outdiagnose, rec_conclusion ,rec_examineday , rec_reexamineday, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2002-02-24 10:00'), STRFTIME('%Y-%m-%d %H:%M','2002-02-24 10:00'), 'Nhổ răng',
 'Bệnh nhân 10 tuổi nhổ răng do gãy răng', 'Nhổ răng cửa','Đã nhổ răng','Khỏi bệnh',STRFTIME('%Y-%m-%d','2002-02-24'),NULL, 17);
 INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, rec_indiagnose, rec_outdiagnose, rec_conclusion ,rec_examineday , rec_reexamineday, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2006-04-10 14:00'), STRFTIME('%Y-%m-%d %H:%M','2006-04-10 10:00'), 'Trồng răng',
 'Bệnh nhân trồng răng', NULL,'Đã trồng răng','Khỏi bệnh',STRFTIME('%Y-%m-%d','2006-04-10'),NULL, 22);
 
-INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, rec_indiagnose, rec_outdiagnose, rec_conclusion ,rec_examineday , rec_reexamineday, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2011-06-03 18:00'), STRFTIME('%Y-%m-%d %H:%M','2011-06-03 18:00'), 'Nhổ răng sâu',
-'Bệnh nhân nam nhổ răng sâu', 'Nhổ 1 răng sâu','Đã nhổ răng sâu','Khỏi bệnh',STRFTIME('%Y-%m-%d','2011-06-03'),NULL, 7);
+/*INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, rec_indiagnose, rec_outdiagnose, rec_conclusion ,rec_examineday , rec_reexamineday, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2011-06-03 18:00'), STRFTIME('%Y-%m-%d %H:%M','2011-06-03 18:00'), 'Nhổ răng sâu',
+'Bệnh nhân nam nhổ răng sâu', 'Nhổ 1 răng sâu','Đã nhổ răng sâu','Khỏi bệnh',STRFTIME('%Y-%m-%d','2011-06-03'),NULL, 7);*/
 INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, rec_indiagnose, rec_outdiagnose, rec_conclusion ,rec_examineday , rec_reexamineday, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2002-02-24 10:00'), STRFTIME('%Y-%m-%d %H:%M','2002-02-24 10:00'), 'Nhổ răng',
 'Bệnh nhân nhổ răng do lung lay', 'Nhổ răng','Đã nhổ răng','Khỏi bệnh',STRFTIME('%Y-%m-%d','2002-02-24'),NULL, 11);
 INSERT INTO RECORD(rec_date, rec_lastmodified, rec_dease, rec_desc, rec_indiagnose, rec_outdiagnose, rec_conclusion ,rec_examineday , rec_reexamineday, appoint_id) VALUES(STRFTIME('%Y-%m-%d %H:%M','2015-07-07 10:30'), STRFTIME('%Y-%m-%d %H:%M','2015-07-07 10:30'), 'Nhổ răng',
