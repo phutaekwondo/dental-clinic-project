@@ -3,6 +3,7 @@ import { CheckFields } from '../../../helpers/request-helper';
 import { respondWithJson } from '../../../helpers/response-helper';
 import PersonFactory from '../../../classes/person-factory.mjs';
 import Person from '../../../classes/person.mjs';
+import { GetDatabase } from '../../../helpers/database/database-helper.mjs';
 
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 
@@ -22,11 +23,30 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
 		return respondWithJson(res, 0, 'We do not have this account');
 	}
 
-	const person = await PersonFactory.GetPersonByUsername(username);
+	var person;
+	try{
+		person = await PersonFactory.GetPersonByUsername(username);
+	}
+	catch(err){
+		return respondWithJson(res, 0, err);
+	}
 
 	if(!person) {
 		return respondWithJson(res, 0, 'We do not have this person');
 	}else{
-		return respondWithJson(res, 1, person);
+		const detailPerson = await GetRowByIdAndRole(person.id, person.acc_role);
+		var result = person;
+		result.detail = detailPerson;
+		return respondWithJson(res, 1, result);
 	}
+}
+
+async function GetRowByIdAndRole(id, role) {
+	const db = await GetDatabase();
+	const table = role;
+	const prefix = role.substring(0, 1) + '_';
+
+	const result = await db.get(`select * from ${table} where ${prefix}id="${id}"`);
+
+	return result;
 }
