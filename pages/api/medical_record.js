@@ -40,7 +40,7 @@ function retrieveData(db, id) {
         let queryResult = [];
         // Query với cú pháp của sqlite3 (MySQL)
         let sql = "SELECT R.*, P.p_name, P.p_dateOB, P.p_sex, P.p_ethnic, P.p_address, P.p_BHXH " +
-            "FROM RECORD R LEFT JOIN APPOINTMENT A ON R.appoint_id = A.appoint_id " +
+            "FROM RECORD R INNER JOIN APPOINTMENT A ON R.appoint_id = A.appoint_id " +
             " INNER JOIN PATIENT P ON A.p_id = P.p_id WHERE rec_id = " + id;
         db.all(sql, (err, rows) => {
             if (err) {
