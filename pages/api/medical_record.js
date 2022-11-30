@@ -39,7 +39,9 @@ function retrieveData(db, id) {
     return new Promise((resolve, reject) => {
         let queryResult = [];
         // Query với cú pháp của sqlite3 (MySQL)
-        let sql = "SELECT * FROM RECORD WHERE rec_id = " + id;
+        let sql = "SELECT R.*, P.p_name, P.p_dateOB, P.p_sex, P.p_ethnic, P.p_address, P.p_BHXH " +
+            "FROM RECORD R INNER JOIN APPOINTMENT A ON R.appoint_id = A.appoint_id " +
+            " INNER JOIN PATIENT P ON A.p_id = P.p_id WHERE R.rec_id = " + id;
         db.all(sql, (err, rows) => {
             if (err) {
                 reject(err);
