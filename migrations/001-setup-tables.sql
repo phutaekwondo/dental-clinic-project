@@ -155,6 +155,14 @@ CREATE TABLE RECORD(
     FOREIGN KEY (appoint_id) REFERENCES APPOINTMENT(appoint_id)
 );
 
+CREATE TABLE CLINIC(
+    clinic_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    clinic_name TEXT,
+    clinic_address TEXT,
+    clinic_fb TEXT,
+    clinic_email TEXT,
+    clinic_hotline TEXT
+);
 
 /* 2.DELETE TABLE, ROW */
     -- a. DELETE TABLE
