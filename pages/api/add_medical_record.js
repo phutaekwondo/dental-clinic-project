@@ -11,20 +11,20 @@ async function handler(req, res) {
     // Kiểm tra method của req
     // Chỉ chấp nhận method POST
     if (req.method !== "POST") {
-        return res.status(405).json({message: `FAIL: The request method must be POST, got ${req.method} instead`});
+        return res.status(200).json({message: `FAIL: The request method must be POST, got ${req.method} instead`});
     }
     // Kiểm tra req có những field hợp lệ hay không
     //  Không thể được thiếu dù chỉ 1 field
     const requiredFields = ["d_id"];
     for (let field of requiredFields) {
         if (!req.body.hasOwnProperty(field)) {
-            return res.status(403).json({message: `FAIL: The request body does not have ${field} field`});
+            return res.status(200).json({message: `FAIL: The request body does not have ${field} field`});
         }
     }
     // Mở kết nối với database
     const db = new sqlite3.Database("./database.sqlite", sqlite3.OPEN_READWRITE, (err) => {
         if (err) {
-            return res.status(403).json({message: "FAIL: Cannot connect to database"});
+            return res.status(200).json({message: "FAIL: Cannot connect to database"});
         }
     });
     // Kiểm tra p_id có tồn tại trong request lẫn database không
@@ -41,28 +41,28 @@ async function handler(req, res) {
         }
     } catch (err) {
         db.close();
-        return res.status(403).json({message: "FAIL"});
+        return res.status(200).json({message: "FAIL"});
     }
     // Nếu p_id không tồn tại -> insert record mới
     // Ngược lại update trong database theo p_id hiện tại
     if (checkPid === 0) {
-        let data = [p_id, req.body["p_dateOB"],
-            req.body["p_sex"], req.body["p_ethnic"], req.body["p_BHXH"], req.body["p_address"]];
+        let data = [p_id, req.body["p_dateOB"] || "0",
+            req.body["p_sex"] || "Nam", req.body["p_ethnic"] || "", req.body["p_BHXH"] || "", req.body["p_address"] || ""];
         try {
             await insertPatient(db, data);
         } catch (err) {
             db.close();
-            return res.status(403).json({message: "FAIL: Cannot connect to database"});
+            return res.status(200).json({message: "FAIL: Cannot connect to database"});
         }
     } else {
-        let data = [req.body["p_dateOB"],
-            req.body["p_sex"], req.body["p_ethnic"], req.body["p_BHXH"], req.body["p_address"]];
+        let data = [req.body["p_dateOB"] || "0",
+            req.body["p_sex"] || "Nam", req.body["p_ethnic"] || "", req.body["p_BHXH"] || "", req.body["p_address"] || ""];
         try {
             await updatePatient(db, data, p_id);
 
         } catch (err) {
             db.close();
-            return res.status(403).json({message: "FAIL: Cannot connect to database"});
+            return res.status(200).json({message: "FAIL: Cannot connect to database"});
         }
 
     }
@@ -73,7 +73,7 @@ async function handler(req, res) {
         appoint_id++;
     } catch (err) {
         db.close();
-        return res.status(403).json({message: "FAIL: Cannot connect to database"});
+        return res.status(200).json({message: "FAIL: Cannot connect to database"});
     }
     // Insert new record
     try {
@@ -81,7 +81,7 @@ async function handler(req, res) {
         await insertAppointment(db, data);
     } catch (err) {
         db.close();
-        return res.status(403).json({message: "FAIL: Cannot connect to database"});
+        return res.status(200).json({message: "FAIL: Cannot connect to database"});
     }
 
 
@@ -93,18 +93,18 @@ async function handler(req, res) {
         new_rec_id++;
     } catch (err) {
         db.close();
-        return res.status(403).json({message: "FAIL: Cannot connect to database"});
+        return res.status(200).json({message: "FAIL: Cannot connect to database"});
     }
     // Insert vào RECORD table
     try {
-        let data = [new_rec_id, req.body["rec_dease"]
-            , req.body["rec_indiagnose"], req.body["rec_outdiagnose"],
-            req.body["rec_desc"], req.body["rec_conclusion"], req.body["rec_examineday"],
-            req.body["rec_reexamineday"], appoint_id];
+        let data = [new_rec_id, req.body["rec_dease"] || ""
+            , req.body["rec_indiagnose"] || "", req.body["rec_outdiagnose"] || "",
+            req.body["rec_desc"] || "", req.body["rec_conclusion"] || "", req.body["rec_examineday"] || "0",
+            req.body["rec_reexamineday"] || "0", appoint_id];
         await insertRecord(db, data);
         return res.status(200).json({message: "SUCCESS"});
     } catch (err) {
-        return res.status(403).json({message: "FAIL: Cannot connect to database"});
+        return res.status(200).json({message: "FAIL: Cannot connect to database"});
     } finally {
         db.close();
     }
