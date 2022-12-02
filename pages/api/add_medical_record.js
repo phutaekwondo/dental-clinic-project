@@ -1,6 +1,13 @@
 import sqlite3 from "sqlite3";
 
-export default async function handler(req, res) {
+export default function wrapper(req, res){
+    if(req.method === "OPTIONS"){
+        return res.status(200).send("ok");
+    }
+    return handler(req, res);
+}
+
+async function handler(req, res) {
     // Kiểm tra method của req
     // Chỉ chấp nhận method POST
     if (req.method !== "POST") {
@@ -8,9 +15,7 @@ export default async function handler(req, res) {
     }
     // Kiểm tra req có những field hợp lệ hay không
     //  Không thể được thiếu dù chỉ 1 field
-    const requiredFields = ["d_id", "rec_dease", "p_dateOB", "p_sex", "p_ethnic", "p_BHXH",
-        "p_address", "rec_indiagnose", "rec_outdiagnose",
-        "rec_desc", "rec_conclusion", "rec_examineday", "rec_reexamineday"];
+    const requiredFields = ["d_id"];
     for (let field of requiredFields) {
         if (!req.body.hasOwnProperty(field)) {
             return res.status(403).json({message: `FAIL: The request body does not have ${field} field`});
