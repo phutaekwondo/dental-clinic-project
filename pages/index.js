@@ -1,12 +1,14 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import { GetAllAPIsPathFixed } from './get-all-apis.mjs'
+// import { GetAllAPIsPathFixed } from './get-all-apis.mjs'
 
 
 export async function getServerSideProps() {
 	//get all api paths
-	const apipaths = GetAllAPIsPathFixed();
+	//const apipaths = GetAllAPIsPathFixed();
+
+    	var apipaths = [];
 
 	//return all api paths
 	return {
