@@ -6,9 +6,9 @@ import styles from '../styles/Home.module.css'
 
 export async function getServerSideProps() {
 	//get all api paths
-	//const apipaths = GetAllAPIsPathFixed();
+	const apipaths = GetAllAPIsPathFixed();
 
-    	var apipaths = [];
+  // var apipaths = [];
 
 	//return all api paths
 	return {
